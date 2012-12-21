@@ -11,7 +11,6 @@ package
 	
 	public class Preloader extends MovieClip
 	{
-		
 		public function Preloader()
 		{
 			addEventListener(Event.ENTER_FRAME, checkFrame);

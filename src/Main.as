@@ -1,9 +1,12 @@
 package
 {
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.utils.Timer;
 	import nemostein.framework.dragonfly.Game;
 	import nemostein.games.geocontact.theriot.TheRiot;
 	import nemostein.intro.IntroSequence;
@@ -49,6 +52,13 @@ package
 		{
 			removeChild(_introSequence);
 			
+			var timer:Timer = new Timer(500, 1);
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerTimerComplete);
+			timer.start();
+		}
+		
+		private function onTimerTimerComplete(event:TimerEvent):void 
+		{
 			var game:Game = new TheRiot();
 			game.start(stage);
 			game.showFps();

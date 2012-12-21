@@ -3,13 +3,13 @@
  * NemoStein, 2012
  * http://www.nemostein.com.br
  */
-package nemostein.games.geocontact.theriot.assets
+package nemostein.games.geocontact.theriot.assets.states.start
 {
 	import flash.display.Bitmap;
 	
-	[Embed(source="test.png")]
+	[Embed(source="moon.png")]
 	
-	public class AssetTest extends Bitmap
+	public class AssetStatesStartMoon extends Bitmap
 	{
 	
 	}

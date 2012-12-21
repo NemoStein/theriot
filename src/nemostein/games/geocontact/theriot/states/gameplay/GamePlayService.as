@@ -1,119 +1,116 @@
 package nemostein.games.geocontact.theriot.states.gameplay
 {
+	import flash.geom.Rectangle;
+	import nemostein.bezier.Path;
+	import nemostein.framework.dragonfly.Container;
 	import nemostein.framework.dragonfly.io.Input;
-	import nemostein.framework.dragonfly.plugins.orderedcontainer.OrderedContainer;
-	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Bullet;
+	import nemostein.games.geocontact.theriot.states.gameplay.hud.HUD;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Ammo;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
-	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Factory;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Unit;
-	import nemostein.games.geocontact.theriot.states.gameplay.upgradewheel.complex.ComplexUpgradeWheel;
-	import nemostein.games.geocontact.theriot.states.gameplay.upgradewheel.factory.FactorySelectorWheel;
-	import nemostein.games.geocontact.theriot.states.gameplay.upgradewheel.factory.FactoryUpgradeWheel;
-	import nemostein.games.geocontact.theriot.states.gameplay.upgradewheel.factory.UnitUpgradeWheel;
-	import nemostein.games.geocontact.theriot.states.gameplay.upgradewheel.WheelMenu;
 	
 	public class GamePlayService
 	{	
 		private var _gamePlay:GamePlay;
 		private var _input:Input;
 		
-		private var _container:OrderedContainer;
+		private var _levelLayer:Container;
+		private var _unitsLayer:Container;
 		
-		private var _complexUpgradeWheel:ComplexUpgradeWheel;
-		private var _factorySelectorWheel:FactorySelectorWheel;
-		private var _factoryUpgradeWheel:FactoryUpgradeWheel;
-		private var _unitUpgradeWheel:UnitUpgradeWheel;
+		private var _unitsPlayer:Vector.<Unit>;
+		private var _unitsAI:Vector.<Unit>;
 		
-		private var _openedWheel:WheelMenu;
+		private var _level:Level;
+		public var complexAI:Complex;
+		public var complexPlayer:Complex;
 		
 		public function GamePlayService(gamePlay:GamePlay, input:Input) 
 		{
 			_gamePlay = gamePlay;
 			_input = input;
-			
-			initialize();
 		}
 		
-		private function initialize():void 
+		public function loadLevel(levelClass:Class):void 
 		{
-			_container = new OrderedContainer();
+			_levelLayer = new Container();
+			_unitsLayer = new Container();
 			
-			_complexUpgradeWheel = new ComplexUpgradeWheel();
-			_factorySelectorWheel = new FactorySelectorWheel();
-			_factoryUpgradeWheel = new FactoryUpgradeWheel();
-			_unitUpgradeWheel = new UnitUpgradeWheel();
+			_unitsPlayer = new Vector.<Unit>();
+			_unitsAI = new Vector.<Unit>();
 			
-			_complexUpgradeWheel.die();
-			_factorySelectorWheel.die();
-			_factoryUpgradeWheel.die();
-			_unitUpgradeWheel.die();
+			_level = new levelClass();
+			_levelLayer.add(_level);
 			
-			_gamePlay.add(_container);
+			var hud:HUD = new HUD();
 			
-			_gamePlay.add(_complexUpgradeWheel);
-			_gamePlay.add(_factorySelectorWheel);
-			_gamePlay.add(_factoryUpgradeWheel);
-			_gamePlay.add(_unitUpgradeWheel);
+			_gamePlay.add(_levelLayer);
+			_gamePlay.add(_unitsLayer);
+			_gamePlay.add(hud);
 		}
 		
-		public function bringComplexSelectorWheel(complex:Complex):void
+		public function addUnit(unit:Unit):void 
 		{
-			_complexUpgradeWheel.revive();
-			_complexUpgradeWheel.setStats(complex.getCurrentStats());
-			
-			_complexUpgradeWheel.x = complex.x;
-			_complexUpgradeWheel.y = complex.y;
-			
-			_openedWheel = _complexUpgradeWheel;
-		}
-		
-		public function bringFactorySelectorWheel(factory:Factory):void
-		{
-			_factorySelectorWheel.revive();
-			_factorySelectorWheel.setStats(factory.getCurrentStats());
-			
-			_factorySelectorWheel.x = factory.x;
-			_factorySelectorWheel.y = factory.y;
-			
-			_openedWheel = _factorySelectorWheel;
-		}
-		
-		public function closeWheel():void
-		{
-			if (_openedWheel)
+			if (unit.ai)
 			{
-				_openedWheel.die();
+				_unitsAI.push(unit);
+				unit.enemyUnits = _unitsPlayer;
+				
+				unit.x = _level.slotAI.x;
+				unit.y = _level.slotAI.y;
 			}
+			else
+			{
+				_unitsPlayer.push(unit);
+				unit.enemyUnits = _unitsAI;
+				
+				unit.x = _level.slotPlayer.x;
+				unit.y = _level.slotPlayer.y;
+			}
+			
+			_unitsLayer.add(unit);
+			
+			unit.path = _level.getPath(unit.ai);
 		}
 		
-		public function addUnit(unit:Unit):void
+		public function fire(ammoClass:Class, fromUnit:Unit, atUnit:Unit):void 
 		{
-			_container.add(unit);
+			var ammo:Ammo = new ammoClass();
+			
+			ammo.x = fromUnit.x;
+			ammo.y = fromUnit.y;
+			
+			ammo.power = fromUnit.power;
+			ammo.target = atUnit;
+			
+			_unitsLayer.add(ammo);
 		}
 		
-		public function removeUnit(unit:Unit):void
+		public function removeAmmo(ammo:Ammo):void 
 		{
-			_container.remove(unit);
+			_unitsLayer.remove(ammo);
 		}
 		
-		public function addFactory(factory:Factory):void
+		public function setBounds(levelBounds:Rectangle):void 
 		{
-			_container.add(factory);
+			_gamePlay.bounds.x = levelBounds.x - 100;
+			_gamePlay.bounds.y = levelBounds.y - 100;
+			_gamePlay.bounds.width = levelBounds.width;
+			_gamePlay.bounds.height = levelBounds.height;
 		}
 		
-		public function removeFactory(factory:Factory):void
+		public function setPlayerComplex(complexPlayer:Complex):void 
 		{
-			_container.remove(factory);
+			this.complexPlayer = complexPlayer;
 		}
 		
-		public function addComplex(complex:Complex):void
+		public function setAIComplex(complexAI:Complex):void 
 		{
-			_container.add(complex);
+			this.complexAI = complexAI;
 		}
 		
-		public function addBullet(bullet:Bullet):void 
+		public function get level():Level 
 		{
-			_container.add(bullet);
+			return _level;
 		}
 	}
 }

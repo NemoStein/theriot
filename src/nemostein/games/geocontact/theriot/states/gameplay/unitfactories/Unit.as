@@ -1,37 +1,49 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 {
+	import flash.geom.Point;
+	import flash.utils.getQualifiedClassName;
+	import nemostein.bezier.Path;
+	import nemostein.bezier.PathTracker;
+	import nemostein.framework.dragonfly.Entity;
+	import nemostein.framework.dragonfly.Game;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayService;
+	import nemostein.utils.ErrorUtils;
+	import nemostein.utils.MathUtils;
 	
-	public class Unit extends Target
+	public class Unit extends Entity
 	{
-		public var health:Number;
-		public var armor:Number;
-		public var speed:Number;
-		public var firePower:Number;
-		public var fireRate:Number;
-		public var fireRange:Number;
+		static public const AIR:String = "air";
+		static public const GROUND:String = "ground";
 		
-		protected var gamePlayService:GamePlayService;
-		protected var factory:Factory;
+		static private const UP:int = 1;
+		static private const DOWN:int = 2;
+		static private const LEFT:int = 3;
+		static private const RIGHT:int = 4;
 		
-		private var _bulletClass:Class;
+		private var _factory:Factory;
+		
+		private var _pathTracker:PathTracker;
+		
+		private var _lookingAt:int;
+		private var _type:String;
+		
 		private var _reloading:Boolean;
 		private var _reloadTime:Number;
 		private var _reloadDelay:Number;
+		private var _rangeSquare:Number;
 		
-		private var _enemy:Target;
+		public var health:Number;
+		public var armor:Number;
+		public var speed:Number;
+		public var power:Number;
+		public var range:Number;
+		public var rate:Number;
 		
-		private var _squareSearchRange:Number;
-		private var _squareFireRange:Number;
+		public var enemyUnits:Vector.<Unit>;
 		
-		public function Unit(factory:Factory, bulletClass:Class)
+		public function Unit(factory:Factory)
 		{
-			this.factory = factory;
-			
-			gamePlayService = GamePlay.service;
-			
-			_bulletClass = bulletClass;
+			_factory = factory;
 			
 			super();
 		}
@@ -40,142 +52,116 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		{
 			super.initialize();
 			
-			relative = false;
+			var stats:FactoryStats = _factory.stats;
+			
+			health = stats.unitHealth;
+			armor = stats.unitArmor;
+			speed = stats.unitSpeed;
+			power = stats.unitPower;
+			range = stats.unitRange;
+			rate = stats.unitRate;
+			
+			_reloading = false;
+			_reloadTime = 0;
+			_reloadDelay = 100 / rate;
+			_rangeSquare = range * range;
+			
+			_type = unitType;
 		}
 		
 		override protected function update():void
 		{
-			super.update();
-			
-			var moveSpeed:Number = speed * time;
-			
-			if (!_enemy || _enemy is Factory)
-			{
-				var newEnemy:Target = findEnemyTarget();
-				
-				if (!_enemy || newEnemy is Unit || !(_enemy as Factory).canWork() && (newEnemy as Factory).canWork())
-				{
-					_enemy = newEnemy;
-				}
-			}
-			
-			if (_enemy && _enemy.active)
-			{
-				if (!engageEnemy())
-				{
-					var distanceX:Number = _enemy.x - x;
-					var distanceY:Number = _enemy.y - y;
-					var direction:Number = Math.atan2(distanceY, distanceX);
-					
-					x += Math.cos(direction) * moveSpeed;
-					y += Math.sin(direction) * moveSpeed;
-				}
-				else if (!_reloading)
-				{
-					fire();
-				}
-			}
-			else
-			{
-				_enemy = null;
-			}
-			
 			if (_reloading)
 			{
 				_reloadTime += time;
 				
 				if (_reloadTime >= _reloadDelay)
 				{
-					_reloadTime -= _reloadDelay;
+					_reloadTime = 0;
 					_reloading = false;
 				}
 			}
-		}
-		
-		private function findEnemyTarget():Target
-		{
-			var squareSearchRange:Number = _squareSearchRange;
-			var localX:Number = x;
-			var localY:Number = y;
 			
-			var closestEnemy:Target;
-			var closestEnemyDistance:Number = Infinity;
+			var enemy:Unit = enemyInRange();
 			
-			var units:Vector.<Unit> = factory.complex.enemyComplex.units;
+			var willFire:Boolean = enemy && !_reloading;
+			var willMove:Boolean = !enemy || _type == AIR;
 			
-			var length:int = units.length;
-			for (var i:int = 0; i < length; ++i)
+			if (willFire)
 			{
-				var target:Target = units[i];
-				if (target.activate)
-				{
-					var distanceX:Number = target.x - localX;
-					var distanceY:Number = target.y - localY;
-					var squareDistance:Number = distanceX * distanceX + distanceY * distanceY;
-					
-					if (squareDistance <= squareSearchRange && squareDistance < closestEnemyDistance)
-					{
-						closestEnemyDistance = squareDistance;
-						closestEnemy = target;
-					}
-				}
+				fire(enemy);
+				_reloading = true;
 			}
 			
-			if (!closestEnemy)
+			if (willMove && _pathTracker)
 			{
-				var workingFactories:Vector.<Factory> = new Vector.<Factory>();
-				var factories:Vector.<Factory> = factory.complex.enemyComplex.factories;
-				var factoriesLength:int = factories.length;
-				
-				for (var j:int = 0; j < factoriesLength; j++) 
+				var moving:Boolean = _pathTracker.move(speed * time);
+				if (moving)
 				{
-					var factory:Factory = factories[j];
-					if (!factory.halted)
+					var quarterPi:Number = MathUtils.QUARTER_PI;
+					var motionAngle:Number = Math.atan2(_pathTracker.y - y, _pathTracker.x - x);
+					
+					if (motionAngle < -quarterPi * 3 || motionAngle > quarterPi * 3)
 					{
-						workingFactories.push(factory);
+						_lookingAt = LEFT;
 					}
-				}
-				
-				var workingFactoriesLength:int = workingFactories.length;
-				if(workingFactoriesLength)
-				{
-					closestEnemy = workingFactories[int(Math.random() * workingFactoriesLength)];
+					else if (motionAngle < -quarterPi)
+					{
+						_lookingAt = UP;
+					}
+					else if (motionAngle < quarterPi)
+					{
+						_lookingAt = RIGHT;
+					}
+					else
+					{
+						_lookingAt = DOWN;
+					}
+					
+					if (_lookingAt == UP)
+					{
+						frame.y = 0;
+					}
+					else if (_lookingAt == LEFT || _lookingAt == RIGHT)
+					{
+						frame.y = height;
+					}
+					else if (_lookingAt == DOWN)
+					{
+						frame.y = height * 2;
+					}
+					
+					if (_lookingAt != LEFT && flipped)
+					{
+						flip();
+					}
+					else if (_lookingAt == LEFT && !flipped)
+					{
+						flip();
+					}
+					
+					x = _pathTracker.x;
+					y = _pathTracker.y;
 				}
 				else
 				{
-					closestEnemy = factories[int(Math.random() * factoriesLength)];
+					die();
+					parent.remove(this);
 				}
 			}
 			
-			return closestEnemy;
+			super.update();
 		}
 		
-		private function engageEnemy():Boolean
+		protected function fire(unit:Unit):void
 		{
-			var distanceX:Number = _enemy.x - x;
-			var distanceY:Number = _enemy.y - y;
-			var squareDistance:Number = distanceX * distanceX + distanceY * distanceY;
-			
-			return squareDistance <= _squareFireRange;
+			GamePlay.service.fire(ammoClass, this, unit);
 		}
 		
-		protected function fire():void
+		public function hit(power:Number):void
 		{
-			_reloading = true;
+			var damage:Number = power - (Math.random() * 0.75 + 0.5) * armor;
 			
-			var bulletClass:Bullet = new _bulletClass(_enemy, firePower);
-			
-			bulletClass.x = x;
-			bulletClass.y = y;
-			
-			gamePlayService.addBullet(bulletClass);
-		}
-		
-		override public function hit(power:Number):void
-		{
-			super.hit(power);
-			
-			var damage:Number = power - armor;
 			if (damage < 1)
 			{
 				damage = 1;
@@ -183,33 +169,57 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			
 			health -= damage;
 			
-			if (health <= 0)
+			if (health < 0)
 			{
 				die();
 			}
 		}
 		
-		override public function die():void
+		protected function enemyInRange():Unit
 		{
-			super.die();
+			for (var i:int = 0; i < enemyUnits.length; ++i)
+			{
+				var enemy:Unit = enemyUnits[i];
+				
+				if (enemy.active)
+				{
+					var distanceX:Number = enemy.x - x;
+					var distanceY:Number = enemy.y - y;
+					var distaceSquare:Number = distanceX * distanceX + distanceY * distanceY;
+					
+					if (distaceSquare <= _rangeSquare)
+					{
+						return enemy;
+					}
+				}
+			}
 			
-			factory.complex.destroyUnit(this);
+			return null;
 		}
 		
-		public function setup(health:Number, armor:Number, speed:Number, firePower:Number, fireRate:Number, fireRange:Number):void 
+		public function get ai():Boolean
 		{
-			this.health = health;
-			this.armor = armor;
-			this.speed = speed;
-			this.firePower = firePower;
-			this.fireRate = fireRate;
-			this.fireRange = fireRange;
-			
-			_reloadDelay = 1 / (fireRate / 10);
-			_reloadTime = 0;
-			
-			_squareSearchRange = (fireRange * 2) * (fireRange * 2);
-			_squareFireRange = fireRange * fireRange;
+			return _factory.ai;
+		}
+		
+		public function get path():Path
+		{
+			return _pathTracker.path;
+		}
+		
+		public function set path(value:Path):void
+		{
+			_pathTracker = new PathTracker(value, ai);
+		}
+		
+		protected function get ammoClass():Class
+		{
+			throw ErrorUtils.abstractMethod(this, "Unit", "ammoClass");
+		}
+		
+		protected function get unitType():String
+		{
+			throw ErrorUtils.abstractMethod(this, "Unit", "unitType");
 		}
 	}
 }

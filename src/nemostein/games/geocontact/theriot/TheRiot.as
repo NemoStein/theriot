@@ -2,10 +2,9 @@ package nemostein.games.geocontact.theriot
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
-	import nemostein.framework.dragonfly.Core;
 	import nemostein.framework.dragonfly.Game;
-	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.leveltest.LevelTest;
 	
 	public class TheRiot extends Game
 	{
@@ -18,8 +17,12 @@ package nemostein.games.geocontact.theriot
 		{
 			super.start(stage, container);
 			
+			changeCursor(new Cursor());
+			
 			var gamePlay:GamePlay = new GamePlay();
 			add(gamePlay);
+			
+			GamePlay.service.loadLevel(LevelTest);
 		}
 	}
 }

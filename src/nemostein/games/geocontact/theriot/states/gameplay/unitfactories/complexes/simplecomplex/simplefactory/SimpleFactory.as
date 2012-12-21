@@ -1,89 +1,44 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complexes.simplecomplex.simplefactory
 {
-	import nemostein.framework.dragonfly.AnchorAlign;
-	import nemostein.framework.dragonfly.Bar;
-	import nemostein.framework.dragonfly.Entity;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Factory;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayService;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.FactoryStats;
 	
 	public class SimpleFactory extends Factory
 	{
 		public function SimpleFactory(complex:Complex)
 		{
-			super(complex, SimpleUnit);
+			super(complex);
 		}
 		
-		override protected function initialize():void
+		override protected function initialize():void 
 		{
-			energyLimit = 250;
-			chargeRate = 150;
-			
-			firePower = 500;
-			fireRate = 10;
-			fireRange = 150;
-			fireCost = 200;
-			
-			assemblyRate = 5;
-			assemblyCost = 75;
-			
-			unitHealth = 20;
-			unitArmor = 4;
-			unitSpeed = 50;
-			unitFirePower = 10;
-			unitFireRate = 10;
-			unitFireRange = 75;
-			
-			//energyLimit *= Math.random() + 0.5;
-			//chargeRate *= Math.random() + 0.5;
-			//
-			//firePower *= Math.random() + 0.5;
-			//fireRate *= Math.random() + 0.5;
-			//fireRange *= Math.random() + 0.5;
-			//fireCost *= Math.random() + 0.5;
-			//
-			//assemblyRate *= Math.random() + 0.5;
-			//assemblyCost *= Math.random() + 0.5;
-			
-			unitHealth *= Math.random() + 0.5;
-			unitArmor *= Math.random() + 0.5;
-			unitSpeed *= Math.random() + 0.5;
-			unitFirePower *= Math.random() + 0.5;
-			unitFireRate *= Math.random() + 0.5;
-			unitFireRange *= Math.random() + 0.5;
-			
 			super.initialize();
 			
-			if (!complex.ai)
-			{
-				drawRectangle(20, 20, 0xffaa0000);
-			}
-			else
-			{
-				drawRectangle(20, 20, 0xff0000aa);
-			}
+			stats = new FactoryStats();
 			
-			alignAnchor(AnchorAlign.CENTER, AnchorAlign.CENTER);
+			stats.assembyCost = 5;
+			stats.assembyRate = 70;
+			stats.unitHealth = 40;
+			stats.unitArmor = 5;
+			stats.unitSpeed = 30;
+			stats.unitPower = 12;
+			stats.unitRange = 125;
+			stats.unitRate = 100;
 			
-			var entity:Entity = new Entity();
-			entity.drawRectangle(50, 7, 0xff4466aa);
-			
-			var bar:Bar = new Bar(entity, getEnergy, getEnergyLimit);
-			
-			bar.x = -25;
-			bar.y = 10;
-			
-			add(bar);
+			stats.assembyCost *= Math.random() * 0.3 + 0.85;
+			stats.assembyRate *= Math.random() * 0.3 + 0.85;
+			stats.unitHealth *= Math.random() * 0.3 + 0.85;
+			stats.unitArmor *= Math.random() * 0.3 + 0.85;
+			stats.unitSpeed *= Math.random() * 0.3 + 0.85;
+			stats.unitPower *= Math.random() * 0.3 + 0.85;
+			stats.unitRange *= Math.random() * 0.3 + 0.85;
+			stats.unitRate *= Math.random() * 0.3 + 0.85;
 		}
 		
-		private function getEnergy():Number
+		override protected function get unitClass():Class
 		{
-			return energy;
-		}
-		
-		private function getEnergyLimit():Number
-		{
-			return energyLimit;
+			return SimpleUnit;
 		}
 	}
 }

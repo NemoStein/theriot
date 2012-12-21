@@ -9,7 +9,7 @@
     <movie width="800" />
     <movie height="600" />
     <movie version="11" />
-    <movie minorVersion="4" />
+    <movie minorVersion="5" />
     <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
   </output>
@@ -86,5 +86,8 @@
     <option testMovie="Default" />
   </options>
   <!-- Plugin storage -->
-  <storage />
+  <storage>
+    <entry key="at_enabled"><![CDATA[1]]></entry>
+    <entry key="at_password"><![CDATA[]]></entry>
+  </storage>
 </project>
