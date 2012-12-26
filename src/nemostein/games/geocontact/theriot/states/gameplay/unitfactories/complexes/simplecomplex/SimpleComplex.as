@@ -15,7 +15,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complex
 			stats = new ComplexStats();
 			
 			stats.energyLimit = 100;
-			stats.energyRecharge = 25;
+			stats.energyRecharge = 15;
 			stats.turretPower = 35;
 			stats.turretRange = 200;
 			stats.turretRate = 125;

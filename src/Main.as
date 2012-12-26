@@ -61,7 +61,7 @@ package
 		{
 			var game:Game = new TheRiot();
 			game.start(stage);
-			game.showFps();
+			//game.showFps();
 		}
 	}
 }

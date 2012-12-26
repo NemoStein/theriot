@@ -1,72 +1,105 @@
 package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
-	import flash.geom.Point;
-	import nemostein.framework.dragonfly.Bar;
-	import nemostein.framework.dragonfly.Container;
 	import nemostein.framework.dragonfly.Entity;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayService;
-	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
+	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
+	import nemostein.framework.dragonfly.Text;
+	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.AssetStatesGameplayHudBase;
+	import nemostein.utils.StringUtils;
 	
-	public class HUD extends Container
+	public class HUD extends Entity
 	{
 		override protected function initialize():void
 		{
 			super.initialize();
 			
-			addEnergyBar();
-			addElapsedFightTime();
+			setParallax(0, 0);
+			
+			addBase();
+			addOptionsButton();
+			addWeather();
+			addTimeElapsed();
+			addControlBar();
 			addMinimap();
-			addProgressBar();
-			addResourcesIndicator();
-			addWeatherIndicator();
+			addEnergyBar();
+			addScrapsIndicator();
+		}
+		
+		private function addBase():void
+		{
+			var hudBase:Entity = new Entity();
+			hudBase.draw(new AssetStatesGameplayHudBase().bitmapData);
+			
+			add(hudBase);
+		}
+		
+		private function addOptionsButton():void 
+		{
+			var optionsButton:OptionsButton = new OptionsButton();
+			
+			optionsButton.x = 8;
+			optionsButton.y = 8;
+			
+			add(optionsButton);
+		}
+		
+		private function addWeather():void 
+		{
+			var weatherDisplay:WeatherDisplay = new WeatherDisplay();
+			
+			weatherDisplay.x = 35;
+			weatherDisplay.y = 11;
+			
+			add(weatherDisplay);
+		}
+		
+		private function addTimeElapsed():void 
+		{
+			var shadowedText:ShadowedText = new ShadowedText("00:00.000", "Lead III", 8, 0xffc0e5f0, Text.RIGHT);
+			
+			shadowedText.x = 135;
+			shadowedText.y = 22;
+			
+			add(shadowedText);
+		}
+		
+		private function addControlBar():void 
+		{
+			var controlBarAllied:ControlBar = new ControlBar();
+			var controlBarEnemy:ControlBar = new ControlBar(true);
+			
+			controlBarAllied.x = 10;
+			controlBarAllied.y = 36;
+			
+			controlBarEnemy.x = 12;
+			controlBarEnemy.y = 36;
+			
+			add(controlBarAllied);
+			add(controlBarEnemy);
+		}
+		
+		private function addMinimap():void
+		{
+		
 		}
 		
 		private function addEnergyBar():void
 		{
-			var gamePlayService:GamePlayService = GamePlay.service;
-			var playerComplex:Complex = gamePlayService.complexPlayer;
+			var energyBar:EnergyBar = new EnergyBar();
 			
-			var content:Entity = new Entity();
-			content.drawRectangle(100, 6, 0xffaa1100);
-			
-			content.x = 2;
-			content.y = 2;
-			
-			var energyBar:Bar = new Bar(content, playerComplex.getEnergy, playerComplex.getEnergyLimit);
-			energyBar.drawRectangle(104, 10, 0xff441100);
-			
-			var slotPlayer:Point = gamePlayService.level.slotPlayer;
-			
-			energyBar.x = slotPlayer.x - 52;
-			energyBar.y = slotPlayer.x + 10;
+			energyBar.x = 10;
+			energyBar.y = 192;
 			
 			add(energyBar);
 		}
 		
-		private function addElapsedFightTime():void 
+		private function addScrapsIndicator():void
 		{
+			var shadowedText:ShadowedText = new ShadowedText("$" + StringUtils.formatNumber(int(Math.random() * int.MAX_VALUE), ",", "."), "Lead III", 8, 0xffc0e5f0);
 			
-		}
-		
-		private function addMinimap():void 
-		{
+			shadowedText.x = 48;
+			shadowedText.y = 218;
 			
-		}
-		
-		private function addProgressBar():void 
-		{
-			
-		}
-		
-		private function addResourcesIndicator():void 
-		{
-			
-		}
-		
-		private function addWeatherIndicator():void 
-		{
-			
+			add(shadowedText);
 		}
 	}
 }

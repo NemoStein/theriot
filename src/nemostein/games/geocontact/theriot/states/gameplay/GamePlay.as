@@ -64,6 +64,11 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			return true;
 		}
 		
+		public function targetPlayerComplex():void 
+		{
+			game.cameraLookAt(service.complexPlayer.x, service.complexPlayer.y);
+		}
+		
 		public function get bounds():Rectangle 
 		{
 			return Core.bounds;

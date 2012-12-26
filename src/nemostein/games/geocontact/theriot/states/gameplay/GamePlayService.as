@@ -10,7 +10,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Unit;
 	
 	public class GamePlayService
-	{	
+	{
 		private var _gamePlay:GamePlay;
 		private var _input:Input;
 		
@@ -92,10 +92,12 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		
 		public function setBounds(levelBounds:Rectangle):void 
 		{
-			_gamePlay.bounds.x = levelBounds.x - 100;
-			_gamePlay.bounds.y = levelBounds.y - 100;
+			_gamePlay.bounds.x = levelBounds.x - 186;
+			_gamePlay.bounds.y = levelBounds.y;
 			_gamePlay.bounds.width = levelBounds.width;
 			_gamePlay.bounds.height = levelBounds.height;
+			
+			_gamePlay.targetPlayerComplex();
 		}
 		
 		public function setPlayerComplex(complexPlayer:Complex):void 
@@ -106,6 +108,21 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		public function setAIComplex(complexAI:Complex):void 
 		{
 			this.complexAI = complexAI;
+		}
+		
+		public function getMaxBattleControl():Number 
+		{
+			return 1;
+		}
+		
+		public function playerBattleControl():Number 
+		{
+			return 0.25;
+		}
+		
+		public function enemyBattleControl():Number 
+		{
+			return 0.25;
 		}
 		
 		public function get level():Level 
