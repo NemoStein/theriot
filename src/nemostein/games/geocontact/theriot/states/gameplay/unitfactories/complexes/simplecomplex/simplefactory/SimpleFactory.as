@@ -18,10 +18,10 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complex
 			stats = new FactoryStats();
 			
 			stats.assembyCost = 5;
-			stats.assembyRate = 70;
+			stats.assembyRate = 150;
 			stats.unitHealth = 40;
 			stats.unitArmor = 5;
-			stats.unitSpeed = 30;
+			stats.unitSpeed = 70;
 			stats.unitPower = 12;
 			stats.unitRange = 125;
 			stats.unitRate = 100;

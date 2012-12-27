@@ -146,7 +146,6 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 				else
 				{
 					die();
-					parent.remove(this);
 				}
 			}
 			
@@ -195,6 +194,13 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			}
 			
 			return null;
+		}
+		
+		override public function die():void 
+		{
+			GamePlay.service.removeUnit(this);
+			
+			super.die();
 		}
 		
 		public function get ai():Boolean

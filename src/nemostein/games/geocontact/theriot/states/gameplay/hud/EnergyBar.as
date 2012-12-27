@@ -2,8 +2,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
 	import flash.display.BitmapData;
 	import flash.geom.Matrix;
+	import nemostein.framework.dragonfly.AnchorAlign;
 	import nemostein.framework.dragonfly.Bar;
 	import nemostein.framework.dragonfly.Entity;
+	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
+	import nemostein.framework.dragonfly.Text;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.energyBar.AssetStatesGameplayHudEnergyBarEnd;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.energyBar.AssetStatesGameplayHudEnergyBarMiddle;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.energyBar.AssetStatesGameplayHudEnergyBarStart;
@@ -15,14 +18,21 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		private var _start:Entity;
 		private var _middle:Entity;
 		private var _end:Entity;
+		private var _energyText:ShadowedText;
 		
 		private var _length:Number;
+		
+		private var _getEnergy:Function;
+		private var _getEnergyLimit:Function;
 		
 		public function EnergyBar()
 		{
 			var playerComplex:Complex = GamePlay.service.complexPlayer;
 			
-			super(playerComplex.getEnergy, playerComplex.getEnergyLimit);
+			_getEnergy = playerComplex.getEnergy;
+			_getEnergyLimit = playerComplex.getEnergyLimit;
+			
+			super(_getEnergy, _getEnergyLimit);
 		}
 		
 		override protected function initialize():void
@@ -33,7 +43,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			var middleData:BitmapData = new AssetStatesGameplayHudEnergyBarMiddle().bitmapData;
 			var endData:BitmapData = new AssetStatesGameplayHudEnergyBarEnd().bitmapData;
 			
-			var middleWidth:int = 162;
+			var middleWidth:int = 163;
 			var origin:BitmapData = middleData;
 			var matrix:Matrix = new Matrix();
 			
@@ -46,6 +56,9 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			_middle = new Entity();
 			_end = new Entity();
 			
+			_energyText = new ShadowedText("0/0", "Lead III", 8, 0xffc0e5f0);
+			_energyText.alignAnchor(AnchorAlign.TOP, AnchorAlign.RIGHT);
+			
 			_start.draw(startData);
 			_middle.draw(middleData);
 			_end.draw(endData);
@@ -53,14 +66,25 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			_middle.x = _start.width;
 			_end.x = _start.width + _middle.width;
 			
+			_energyText.x = 162;
+			_energyText.y = 1;
+			
 			add(_start);
 			add(_middle);
 			add(_end);
+			add(_energyText);
 			
 			_length = _start.width + _middle.width + _end.width;
 			
 			width = _length;
 			height = _start.height;
+		}
+		
+		override protected function update():void 
+		{
+			_energyText.text = int(_getEnergy()) + "/" + int(_getEnergyLimit());
+			
+			super.update();
 		}
 		
 		override protected function getLength():Number

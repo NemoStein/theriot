@@ -24,13 +24,13 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		public var complexAI:Complex;
 		public var complexPlayer:Complex;
 		
-		public function GamePlayService(gamePlay:GamePlay, input:Input) 
+		public function GamePlayService(gamePlay:GamePlay, input:Input)
 		{
 			_gamePlay = gamePlay;
 			_input = input;
 		}
 		
-		public function loadLevel(levelClass:Class):void 
+		public function loadLevel(levelClass:Class):void
 		{
 			_levelLayer = new Container();
 			_unitsLayer = new Container();
@@ -48,7 +48,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			_gamePlay.add(hud);
 		}
 		
-		public function addUnit(unit:Unit):void 
+		public function addUnit(unit:Unit):void
 		{
 			if (unit.ai)
 			{
@@ -72,7 +72,31 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			unit.path = _level.getPath(unit.ai);
 		}
 		
-		public function fire(ammoClass:Class, fromUnit:Unit, atUnit:Unit):void 
+		public function removeUnit(unit:Unit):void
+		{
+			var unitIndex:int;
+			
+			if (unit.ai)
+			{
+				unitIndex = _unitsAI.indexOf(unit);
+				if (unitIndex >= 0)
+				{
+					_unitsAI.splice(unitIndex, 1);
+					_unitsLayer.remove(unit);
+				}
+			}
+			else
+			{
+				unitIndex = _unitsPlayer.indexOf(unit)
+				if (unitIndex >= 0)
+				{
+					_unitsPlayer.splice(unitIndex, 1);
+					_unitsLayer.remove(unit);
+				}
+			}
+		}
+		
+		public function fire(ammoClass:Class, fromUnit:Unit, atUnit:Unit):void
 		{
 			var ammo:Ammo = new ammoClass();
 			
@@ -85,12 +109,12 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			_unitsLayer.add(ammo);
 		}
 		
-		public function removeAmmo(ammo:Ammo):void 
+		public function removeAmmo(ammo:Ammo):void
 		{
 			_unitsLayer.remove(ammo);
 		}
 		
-		public function setBounds(levelBounds:Rectangle):void 
+		public function setBounds(levelBounds:Rectangle):void
 		{
 			_gamePlay.bounds.x = levelBounds.x - 186;
 			_gamePlay.bounds.y = levelBounds.y;
@@ -100,32 +124,37 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			_gamePlay.targetPlayerComplex();
 		}
 		
-		public function setPlayerComplex(complexPlayer:Complex):void 
+		public function setPlayerComplex(complexPlayer:Complex):void
 		{
 			this.complexPlayer = complexPlayer;
 		}
 		
-		public function setAIComplex(complexAI:Complex):void 
+		public function setAIComplex(complexAI:Complex):void
 		{
 			this.complexAI = complexAI;
 		}
 		
-		public function getMaxBattleControl():Number 
+		public function getBattleTimeElapsed():int
+		{
+			return 0;
+		}
+		
+		public function getMaxBattleControl():Number
 		{
 			return 1;
 		}
 		
-		public function playerBattleControl():Number 
+		public function playerBattleControl():Number
 		{
 			return 0.25;
 		}
 		
-		public function enemyBattleControl():Number 
+		public function enemyBattleControl():Number
 		{
 			return 0.25;
 		}
 		
-		public function get level():Level 
+		public function get level():Level
 		{
 			return _level;
 		}

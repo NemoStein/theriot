@@ -4,6 +4,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
 	import nemostein.framework.dragonfly.Text;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.AssetStatesGameplayHudBase;
+	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsEnergyLimit;
+	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsEnergyRecharge;
+	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsPower;
+	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsRange;
+	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsRate;
 	import nemostein.utils.StringUtils;
 	
 	public class HUD extends Entity
@@ -22,6 +27,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			addMinimap();
 			addEnergyBar();
 			addScrapsIndicator();
+			addComplexUpgrades();
+			addTurretUpgrades();
 		}
 		
 		private function addBase():void
@@ -54,7 +61,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		private function addTimeElapsed():void 
 		{
-			var shadowedText:ShadowedText = new ShadowedText("00:00.000", "Lead III", 8, 0xffc0e5f0, Text.RIGHT);
+			var shadowedText:TimeElapsed = new TimeElapsed();
 			
 			shadowedText.x = 135;
 			shadowedText.y = 22;
@@ -79,7 +86,12 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		private function addMinimap():void
 		{
-		
+			var minimap:Minimap = new Minimap();
+			
+			minimap.x = 8;
+			minimap.y = 48;
+			
+			add(minimap);
 		}
 		
 		private function addEnergyBar():void
@@ -100,6 +112,41 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			shadowedText.y = 218;
 			
 			add(shadowedText);
+		}
+		
+		private function addComplexUpgrades():void
+		{
+			var energyLimitButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsEnergyLimit);
+			var energyRechargeButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsEnergyRecharge);
+			
+			energyLimitButton.x = 11;
+			energyLimitButton.y = 252;
+			
+			energyRechargeButton.x = 66;
+			energyRechargeButton.y = 252;
+			
+			add(energyLimitButton);
+			add(energyRechargeButton);
+		}
+		
+		private function addTurretUpgrades():void
+		{
+			var rangeButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsRange);
+			var rateButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsRate);
+			var powerButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsPower);
+			
+			rangeButton.x = 11;
+			rangeButton.y = 319;
+			
+			rateButton.x = 66;
+			rateButton.y = 319;
+			
+			powerButton.x = 121;
+			powerButton.y = 319;
+			
+			add(rangeButton);
+			add(rateButton);
+			add(powerButton);
 		}
 	}
 }

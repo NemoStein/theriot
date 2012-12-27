@@ -93,9 +93,9 @@ package nemostein.games.geocontact.theriot.states.gameplay
 				graphics.lineTo(result.x, result.y);
 			}
 			
-			for each (var path:Path in(!reverse ? path.forward : path.backward))
+			for each (var debugPath:Path in (!reverse ? path.forward : path.backward))
 			{
-				debugDrawPath(graphics, path, reverse);
+				debugDrawPath(graphics, debugPath, reverse);
 			}
 		}
 		
