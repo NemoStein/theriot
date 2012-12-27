@@ -32,6 +32,8 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		
 		public function loadLevel(levelClass:Class):void
 		{
+			_gamePlay.resetBattleTimer();
+			
 			_levelLayer = new Container();
 			_unitsLayer = new Container();
 			
@@ -134,9 +136,9 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			this.complexAI = complexAI;
 		}
 		
-		public function getBattleTimeElapsed():int
+		public function getBattleElapsedTime():int
 		{
-			return 0;
+			return _gamePlay.battleElapsedTime;
 		}
 		
 		public function getMaxBattleControl():Number

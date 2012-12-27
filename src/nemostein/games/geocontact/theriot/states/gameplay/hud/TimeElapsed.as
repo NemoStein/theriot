@@ -14,7 +14,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		override protected function update():void 
 		{
-			var timeElapsed:int = GamePlay.service.getBattleTimeElapsed();
+			var timeElapsed:int = GamePlay.service.getBattleElapsedTime();
 			
 			var minute:String = int(timeElapsed / 1000 / 60).toString();
 			var seconds:String = int(timeElapsed / 1000 % 60).toString();

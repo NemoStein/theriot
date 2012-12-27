@@ -21,6 +21,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		//}
 		
 		private var _scrolling:Boolean;
+		private var _battleElapsedTime:int;
 		
 		override protected function initialize():void 
 		{
@@ -31,6 +32,8 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		
 		override protected function update():void 
 		{
+			_battleElapsedTime += elapsed;
+			
 			if (_scrolling)
 			{
 				var mouseDelta:Point = input.mouseDelta;
@@ -67,6 +70,16 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		public function targetPlayerComplex():void 
 		{
 			game.cameraLookAt(service.complexPlayer.x, service.complexPlayer.y);
+		}
+		
+		public function resetBattleTimer():void 
+		{
+			_battleElapsedTime = 0;
+		}
+		
+		public function get battleElapsedTime():int
+		{
+			return _battleElapsedTime;
 		}
 		
 		public function get bounds():Rectangle 
