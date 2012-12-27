@@ -156,6 +156,11 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			return 0.25;
 		}
 		
+		public function getPlayerScraps():int
+		{
+			return 0;
+		}
+		
 		public function get level():Level
 		{
 			return _level;

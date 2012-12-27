@@ -121,12 +121,12 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		private function addScrapsIndicator():void
 		{
-			var shadowedText:ShadowedText = new ShadowedText("$" + StringUtils.formatNumber(int(Math.random() * int.MAX_VALUE), ",", "."), "Lead III", 8, 0xffc0e5f0);
+			var scrapsIndicator:ScrapsIndicator = new ScrapsIndicator();
 			
-			shadowedText.x = 48;
-			shadowedText.y = 218;
+			scrapsIndicator.x = 48;
+			scrapsIndicator.y = 218;
 			
-			add(shadowedText);
+			add(scrapsIndicator);
 		}
 		
 		private function addComplexUpgrades():void
