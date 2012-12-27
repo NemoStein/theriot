@@ -1,5 +1,6 @@
 package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
+	import nemostein.framework.dragonfly.AnchorAlign;
 	import nemostein.framework.dragonfly.Entity;
 	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
 	import nemostein.framework.dragonfly.Text;
@@ -53,7 +54,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(hudBase);
 		}
 		
-		private function addOptionsButton():void 
+		private function addOptionsButton():void
 		{
 			var optionsButton:OptionsButton = new OptionsButton();
 			
@@ -63,7 +64,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(optionsButton);
 		}
 		
-		private function addWeather():void 
+		private function addWeather():void
 		{
 			var weatherDisplay:WeatherDisplay = new WeatherDisplay();
 			
@@ -73,7 +74,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(weatherDisplay);
 		}
 		
-		private function addTimeElapsed():void 
+		private function addTimeElapsed():void
 		{
 			var shadowedText:TimeElapsed = new TimeElapsed();
 			
@@ -83,7 +84,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(shadowedText);
 		}
 		
-		private function addControlBar():void 
+		private function addControlBar():void
 		{
 			var controlBarAllied:ControlBar = new ControlBar();
 			var controlBarEnemy:ControlBar = new ControlBar(true);
@@ -163,7 +164,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(powerButton);
 		}
 		
-		private function addFactoryTabs():void 
+		private function addFactoryTabs():void
 		{
 			var tab1:Entity = new Entity(new AssetStatesGameplayHudTabs1().bitmapData);
 			var tab2:Entity = new Entity(new AssetStatesGameplayHudTabs2().bitmapData);
@@ -193,12 +194,12 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			tab5.y = 384;
 			tab6.y = 384;
 			
-			tab1.visible = false;
-			tab2.visible = false;
-			tab3.visible = false;
-			tab4.visible = false;
-			tab5.visible = false;
-			tab6.visible = false;
+			//tab1.hide();
+			tab2.hide();
+			tab3.hide();
+			tab4.hide();
+			tab5.hide();
+			tab6.hide();
 			
 			factoryC.enable();
 			factoryA.unlock();
@@ -233,7 +234,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(factoryB2);
 		}
 		
-		private function addFactoryUpgrades():void 
+		private function addFactoryUpgrades():void
 		{
 			var rangeButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsRange);
 			var rateButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsRate);
@@ -246,6 +247,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			var buildButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsBuild);
 			
 			var lockedText:ShadowedText = new ShadowedText("This factory is Locked\rBuy Factory $$ to unlock", "Lead III", 8, 0xffc0e5f0, Text.CENTER);
+			
+			lockedText.alignAnchor(AnchorAlign.CENTER, AnchorAlign.CENTER);
 			
 			rangeButton.x = 11;
 			rangeButton.y = 416;
@@ -274,6 +277,20 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			buildButton.x = 121;
 			buildButton.y = 502;
 			
+			lockedText.x = 93;
+			lockedText.y = 480;
+			
+			//rangeButton.hide();
+			//rateButton.hide();
+			//powerButton.hide();
+			//speedButton.hide();
+			//armorButton.hide();
+			//healthButton.hide();
+			//assemblyRateButton.hide();
+			//assemblyCostButton.hide();
+			buildButton.hide();
+			lockedText.hide();
+			
 			add(rangeButton);
 			add(rateButton);
 			add(powerButton);
@@ -283,6 +300,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(assemblyRateButton);
 			add(assemblyCostButton);
 			add(buildButton);
+			add(lockedText);
 		}
 	}
 }
