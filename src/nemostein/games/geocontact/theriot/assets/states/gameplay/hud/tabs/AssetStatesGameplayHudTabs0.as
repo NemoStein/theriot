@@ -7,9 +7,9 @@ package nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs
 {
 	import flash.display.Bitmap;
 	
-	[Embed(source="6.png")]
+	[Embed(source="0.png")]
 	
-	public class AssetStatesGameplayHudTabs6 extends Bitmap
+	public class AssetStatesGameplayHudTabs0 extends Bitmap
 	{
 	
 	}
