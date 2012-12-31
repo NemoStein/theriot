@@ -4,6 +4,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 	import flash.utils.getQualifiedClassName;
 	import nemostein.bezier.Path;
 	import nemostein.bezier.PathTracker;
+	import nemostein.framework.dragonfly.Animation;
 	import nemostein.framework.dragonfly.Entity;
 	import nemostein.framework.dragonfly.Game;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
@@ -14,6 +15,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 	{
 		static public const AIR:String = "air";
 		static public const GROUND:String = "ground";
+		
+		static public const RUN:String = "run";
+		static public const FIRE:String = "fire";
+		static public const DIE:String = "die";
+		static public const DEAD:String = "dead";
 		
 		static private const UP:int = 1;
 		static private const DOWN:int = 2;
@@ -31,6 +37,9 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		private var _reloadTime:Number;
 		private var _reloadDelay:Number;
 		private var _rangeSquare:Number;
+		private var _dying:Boolean;
+		private var _target:Unit;
+		private var _deathAnimation:int;
 		
 		public var health:Number;
 		public var armor:Number;
@@ -67,55 +76,109 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			_rangeSquare = range * range;
 			
 			_type = unitType;
+			
+			addAnimation(RUN, [0, 1, 2], 10);
+			addAnimation(FIRE, [3, 4, 5, 6], 10, false, fireAnimationCallback);
+			addAnimation(DIE, [7, 8, 9], 7, false, deathAnimationCallback);
+			addAnimation(DEAD, [10, 11], 5, true, deathAnimationCallback);
+			
+			playAnimation(RUN);
+		}
+		
+		private function fireAnimationCallback(animation:Animation, keyframe:int, cycle:Boolean):void
+		{
+			if (keyframe == 2)
+			{
+				GamePlay.service.fire(ammoClass, this, _target);
+			}
+			else if (cycle)
+			{
+				_target = null;
+			} 
+		}
+		
+		private function deathAnimationCallback(animation:Animation, keyframe:int, cycle:Boolean):void
+		{
+			if (cycle)
+			{
+				if (animation.id == DIE)
+				{
+					playAnimation(DEAD);
+				}
+				else if (animation.id == DEAD && _deathAnimation++ == 5)
+				{
+					GamePlay.service.removeUnit(this);
+					super.die();
+				}
+			}
 		}
 		
 		override protected function update():void
 		{
-			if (_reloading)
+			if (!_dying)
 			{
-				_reloadTime += time;
-				
-				if (_reloadTime >= _reloadDelay)
+				if (_reloading)
 				{
-					_reloadTime = 0;
-					_reloading = false;
-				}
-			}
-			
-			var enemy:Unit = enemyInRange();
-			
-			var willFire:Boolean = enemy && !_reloading;
-			var willMove:Boolean = !enemy || _type == AIR;
-			
-			if (willFire)
-			{
-				fire(enemy);
-				_reloading = true;
-			}
-			
-			if (willMove && _pathTracker)
-			{
-				var moving:Boolean = _pathTracker.move(speed * time);
-				if (moving)
-				{
-					var quarterPi:Number = MathUtils.QUARTER_PI;
-					var motionAngle:Number = Math.atan2(_pathTracker.y - y, _pathTracker.x - x);
+					_reloadTime += time;
 					
-					if (motionAngle < -quarterPi * 3 || motionAngle > quarterPi * 3)
+					if (_reloadTime >= _reloadDelay)
 					{
-						_lookingAt = LEFT;
+						_reloadTime = 0;
+						_reloading = false;
 					}
-					else if (motionAngle < -quarterPi)
+				}
+				
+				var quarterPi:Number = MathUtils.QUARTER_PI;
+				var lookAngle:Number;
+				
+				var enemy:Unit = enemyInRange();
+				
+				var willFire:Boolean = enemy && !_reloading;
+				if (willFire)
+				{
+					lookAngle = Math.atan2(enemy.y - y, enemy.x - x);
+					
+					fire(enemy);
+					_reloading = true;
+				}
+				
+				var willMove:Boolean = (!_target || _type == AIR) && _pathTracker;
+				if (willMove)
+				{
+					playAnimation(RUN, false);
+					
+					var moving:Boolean = _pathTracker.move(speed * time);
+					if (moving)
 					{
-						_lookingAt = UP;
-					}
-					else if (motionAngle < quarterPi)
-					{
-						_lookingAt = RIGHT;
+						lookAngle = Math.atan2(_pathTracker.y - y, _pathTracker.x - x);
+						
+						x = _pathTracker.x;
+						y = _pathTracker.y;
 					}
 					else
 					{
+						GamePlay.service.hitEnemyComplex(this);
+						die();
+					}
+				}
+				
+				if(!isNaN(lookAngle))
+				{
+					if (lookAngle < -quarterPi * 3 || lookAngle > quarterPi * 3)
+					{
+						_lookingAt = LEFT;
+					}
+					else if (lookAngle < -quarterPi)
+					{
+						_lookingAt = UP;
+					}
+					else if (lookAngle > quarterPi)
+					{
 						_lookingAt = DOWN;
+					}
+					else
+					{
+						_lookingAt = RIGHT;
 					}
 					
 					if (_lookingAt == UP)
@@ -125,27 +188,16 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 					else if (_lookingAt == LEFT || _lookingAt == RIGHT)
 					{
 						frame.y = height;
+						
+						if (_lookingAt == LEFT && !flipped || _lookingAt != LEFT && flipped)
+						{
+							flip();
+						}
 					}
 					else if (_lookingAt == DOWN)
 					{
 						frame.y = height * 2;
 					}
-					
-					if (_lookingAt != LEFT && flipped)
-					{
-						flip();
-					}
-					else if (_lookingAt == LEFT && !flipped)
-					{
-						flip();
-					}
-					
-					x = _pathTracker.x;
-					y = _pathTracker.y;
-				}
-				else
-				{
-					die();
 				}
 			}
 			
@@ -154,7 +206,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		
 		protected function fire(unit:Unit):void
 		{
-			GamePlay.service.fire(ammoClass, this, unit);
+			_target = unit;
+			playAnimation(FIRE);
 		}
 		
 		public function hit(power:Number):void
@@ -180,7 +233,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			{
 				var enemy:Unit = enemyUnits[i];
 				
-				if (enemy.active)
+				if (enemy.active && !enemy._dying)
 				{
 					var distanceX:Number = enemy.x - x;
 					var distanceY:Number = enemy.y - y;
@@ -196,11 +249,13 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			return null;
 		}
 		
-		override public function die():void 
+		override public function die():void
 		{
-			GamePlay.service.removeUnit(this);
-			
-			super.die();
+			if (!_dying)
+			{
+				_dying = true;
+				playAnimation(DIE, false);
+			}
 		}
 		
 		public function get ai():Boolean

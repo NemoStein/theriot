@@ -4,9 +4,12 @@ package nemostein.games.geocontact.theriot.states.gameplay
 	import nemostein.bezier.Path;
 	import nemostein.framework.dragonfly.Container;
 	import nemostein.framework.dragonfly.io.Input;
+	import nemostein.games.geocontact.theriot.states.gameplay.hud.FactoryButton;
 	import nemostein.games.geocontact.theriot.states.gameplay.hud.HUD;
+	import nemostein.games.geocontact.theriot.states.gameplay.leveltest.LevelTest;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Ammo;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Factory;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Unit;
 	
 	public class GamePlayService
@@ -21,6 +24,8 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		private var _unitsAI:Vector.<Unit>;
 		
 		private var _level:Level;
+		private var _hud:HUD;
+		
 		public var complexAI:Complex;
 		public var complexPlayer:Complex;
 		
@@ -34,6 +39,21 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		{
 			_gamePlay.resetBattleTimer();
 			
+			if (_levelLayer)
+			{
+				_gamePlay.remove(_levelLayer);
+			}
+			
+			if (_unitsLayer)
+			{
+				_gamePlay.remove(_unitsLayer);
+			}
+			
+			if (_hud)
+			{
+				_gamePlay.remove(_hud);
+			}
+			
 			_levelLayer = new Container();
 			_unitsLayer = new Container();
 			
@@ -43,11 +63,11 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			_level = new levelClass();
 			_levelLayer.add(_level);
 			
-			var hud:HUD = new HUD();
+			_hud = new HUD();
 			
 			_gamePlay.add(_levelLayer);
 			_gamePlay.add(_unitsLayer);
-			_gamePlay.add(hud);
+			_gamePlay.add(_hud);
 		}
 		
 		public function addUnit(unit:Unit):void
@@ -134,6 +154,44 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		public function setAIComplex(complexAI:Complex):void
 		{
 			this.complexAI = complexAI;
+		}
+		
+		public function hitEnemyComplex(unit:Unit):void
+		{
+			var complex:Complex;
+			
+			if (unit.ai)
+			{
+				complex = complexPlayer;
+			}
+			else
+			{
+				complex = complexAI;
+			}
+			
+			complex.hit(unit.health);
+		}
+		
+		public function complexDestroyed(complex:Complex):void 
+		{
+			if (complex.ai)
+			{
+				playerVictory();
+			}
+			else
+			{
+				playerDefeat();
+			}
+		}
+		
+		private function playerVictory():void 
+		{
+			loadLevel(LevelTest);
+		}
+		
+		private function playerDefeat():void 
+		{
+			loadLevel(LevelTest);
 		}
 		
 		public function getBattleElapsedTime():int

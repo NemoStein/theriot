@@ -8,32 +8,27 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complex
 	{
 		public function SimpleFactory(complex:Complex)
 		{
-			super(complex);
-		}
-		
-		override protected function initialize():void 
-		{
-			super.initialize();
+			super(complex, "C");
 			
 			stats = new FactoryStats();
 			
 			stats.assembyCost = 5;
-			stats.assembyRate = 150;
-			stats.unitHealth = 40;
-			stats.unitArmor = 5;
-			stats.unitSpeed = 70;
-			stats.unitPower = 12;
-			stats.unitRange = 125;
-			stats.unitRate = 100;
+			stats.assembyRate = 10;
+			stats.unitHealth = 10;
+			stats.unitArmor = 0;
+			stats.unitSpeed = 35;
+			stats.unitPower = 2;
+			stats.unitRange = 85;
+			stats.unitRate = 50;
 			
-			stats.assembyCost *= Math.random() * 0.3 + 0.85;
-			stats.assembyRate *= Math.random() * 0.3 + 0.85;
-			stats.unitHealth *= Math.random() * 0.3 + 0.85;
-			stats.unitArmor *= Math.random() * 0.3 + 0.85;
-			stats.unitSpeed *= Math.random() * 0.3 + 0.85;
-			stats.unitPower *= Math.random() * 0.3 + 0.85;
-			stats.unitRange *= Math.random() * 0.3 + 0.85;
-			stats.unitRate *= Math.random() * 0.3 + 0.85;
+			//stats.assembyCost *= Math.random() * 0.8 + 0.6;
+			//stats.assembyRate *= Math.random() * 0.8 + 0.6;
+			//stats.unitHealth *= Math.random() * 0.8 + 0.6;
+			//stats.unitArmor *= Math.random() * 0.8 + 0.6;
+			//stats.unitSpeed *= Math.random() * 0.8 + 0.6;
+			//stats.unitPower *= Math.random() * 0.8 + 0.6;
+			//stats.unitRange *= Math.random() * 0.8 + 0.6;
+			//stats.unitRate *= Math.random() * 0.8 + 0.6;
 		}
 		
 		override protected function get unitClass():Class

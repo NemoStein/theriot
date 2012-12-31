@@ -56,7 +56,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			width = _up.width;
 			height = _up.height;
 			
-			_down.visible = false;
+			_down.hide();
 			
 			_plus.x = 2;
 			_plus.y = 4;
@@ -80,8 +80,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		override public function pressed(point:Point = null):void
 		{
-			_up.visible = false;
-			_down.visible = true;
+			_up.hide();
+			_down.show();
 			
 			_plus.y += 1;
 			_price.y += 1;
@@ -93,8 +93,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		override public function released(point:Point = null):void
 		{
-			_up.visible = true;
-			_down.visible = false;
+			_up.show();
+			_down.hide();
 			
 			_plus.y -= 1;
 			_price.y -= 1;

@@ -26,7 +26,12 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complex
 			stats.turretRange *= Math.random() * 0.3 + 0.85;
 			stats.turretRate *= Math.random() * 0.3 + 0.85;
 			
-			addFactory(new SimpleFactory(this));
+			addFactory(new SimpleFactory(this), 0);
+			addFactory(new SimpleFactory(this), 1);
+			addFactory(new SimpleFactory(this), 2);
+			addFactory(new SimpleFactory(this), 3);
+			addFactory(new SimpleFactory(this), 4);
+			addFactory(new SimpleFactory(this), 5);
 		}
 	}
 }

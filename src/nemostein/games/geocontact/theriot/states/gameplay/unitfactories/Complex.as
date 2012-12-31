@@ -1,10 +1,9 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 {
 	import flash.geom.Point;
-	import nemostein.framework.dragonfly.Bar;
 	import nemostein.framework.dragonfly.Entity;
 	import nemostein.framework.dragonfly.io.MouseAware;
-	import nemostein.games.geocontact.theriot.states.gameplay.Level;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
 	
 	public class Complex extends Entity implements MouseAware
 	{
@@ -14,13 +13,14 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		
 		private var _enery:Number;
 		private var _factories:Vector.<Factory>;
+		private var _dead:Boolean;
 		
 		override protected function initialize():void
 		{
 			super.initialize();
 			
 			_enery = 0;
-			_factories = new Vector.<Factory>();
+			_factories = new Vector.<Factory>(6, true);
 		}
 		
 		override protected function update():void
@@ -35,13 +35,21 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 				}
 			}
 			
+			for (var i:int = 0; i < _factories.length; ++i) 
+			{
+				var factory:Factory = _factories[i];
+				if(factory)
+				{
+					factory.update(time);
+				}
+			}
+			
 			super.update();
 		}
 		
-		protected function addFactory(factory:Factory):void
+		protected function addFactory(factory:Factory, slot:int):void
 		{
-			_factories.push(factory);
-			add(factory);
+			_factories[slot] = factory;
 		}
 		
 		public function drain(enery:Number):Boolean
@@ -56,6 +64,33 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			return false;
 		}
 		
+		public function hit(power:Number):void 
+		{
+			_enery -= power;
+			
+			if (_enery <= 0)
+			{
+				_enery = 0;
+				die();
+			}
+		}
+		
+		override public function die():void 
+		{
+			if (!_dead)
+			{
+				_dead = true;
+				GamePlay.service.complexDestroyed(this);
+				
+				for each (var factory:Factory in _factories) 
+				{
+					factory.destroy();
+				}
+				
+				super.die();
+			}
+		}
+		
 		public function controlledByAI():void
 		{
 			_ai = true;
@@ -64,6 +99,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		public function get ai():Boolean
 		{
 			return _ai;
+		}
+		
+		public function get factories():Vector.<Factory> 
+		{
+			return _factories;
 		}
 		
 		public function getEnergy():Number

@@ -80,7 +80,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			height = _start.height;
 		}
 		
-		override protected function update():void 
+		override protected function update():void
 		{
 			_energyText.text = int(_getEnergy()) + "/" + int(_getEnergyLimit());
 			
@@ -102,9 +102,13 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			_middle.width = value - 2;
 			_end.x = _start.width + _middle.width;
 			
-			_start.visible = !(value < 1);
-			_end.visible = !(value < 2);
-			_middle.visible = !(value < 3);
+			value < 1 ? _start.hide() : _start.show();
+			value < 2 ? _end.hide() : _end.show();
+			value < 3 ? _middle.hide() : _middle.show();
+		
+			//_start.visible = !(value < 1);
+			//_end.visible = !(value < 2);
+			//_middle.visible = !(value < 3);
 		}
 	}
 }

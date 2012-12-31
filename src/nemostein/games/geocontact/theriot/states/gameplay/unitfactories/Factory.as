@@ -7,30 +7,25 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
 	import nemostein.utils.ErrorUtils;
 	
-	public class Factory extends Entity implements MouseAware
+	public class Factory
 	{
 		public var stats:FactoryStats;
 		
 		private var _complex:Complex;
+		private var _name:String;
 		
 		private var _assemblyReady:Boolean;
 		private var _assemblyTime:Number;
 		
-		public function Factory(complex:Complex)
+		public function Factory(complex:Complex, name:String)
 		{
 			_complex = complex;
-			
-			super();
-		}
-		
-		override protected function initialize():void 
-		{
-			super.initialize();
+			_name = name;
 			
 			_assemblyTime = 0;
 		}
 		
-		override protected function update():void
+		public function update(time:Number):void
 		{
 			if (!_assemblyReady)
 			{
@@ -51,18 +46,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 				
 				_assemblyReady = false;
 			}
-			
-			super.update();
 		}
 		
-		public function onMouseDown(key:int, mouse:Point):Boolean
+		public function destroy():void 
 		{
-			return true;
-		}
-		
-		public function onMouseUp(key:int, mouse:Point):Boolean
-		{
-			return true;
+ 			
 		}
 		
 		public function getAssemblyTime():Number 
@@ -78,6 +66,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		public function get ai():Boolean
 		{
 			return _complex.ai;
+		}
+		
+		public function get name():String 
+		{
+			return _name;
 		}
 		
 		protected function get unitClass():Class

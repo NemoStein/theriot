@@ -26,7 +26,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			_down.draw(new AssetStatesGameplayHudButtonsSmall1down().bitmapData);
 			_icon.draw(new AssetStatesGameplayHudIconsOptions().bitmapData);
 			
-			_down.visible = false;
+			_down.hide();
 			
 			_icon.x = 3;
 			_icon.y = 3;
@@ -41,8 +41,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		override public function pressed(point:Point = null):void 
 		{
-			_up.visible = false;
-			_down.visible = true;
+			_up.hide();
+			_down.show();
 			
 			_icon.y += 1;
 			
@@ -51,8 +51,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		override public function released(point:Point = null):void 
 		{
-			_up.visible = true;
-			_down.visible = false;
+			_up.show();
+			_down.hide();
 			
 			_icon.y -= 1;
 			
