@@ -2,11 +2,10 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
 	import flash.display.BitmapData;
 	import flash.geom.Matrix;
-	import nemostein.framework.dragonfly.AnchorAlign;
 	import nemostein.framework.dragonfly.Bar;
-	import nemostein.framework.dragonfly.Entity;
-	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
-	import nemostein.framework.dragonfly.Text;
+	import nemostein.framework.dragonfly.modules.container.entity.AnchorAlign;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
+	import nemostein.framework.dragonfly.modules.text.ShadowedText;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.energyBar.AssetStatesGameplayHudEnergyBarEnd;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.energyBar.AssetStatesGameplayHudEnergyBarMiddle;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.energyBar.AssetStatesGameplayHudEnergyBarStart;

@@ -1,10 +1,10 @@
 package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
 	import flash.geom.Point;
-	import nemostein.framework.dragonfly.AnchorAlign;
 	import nemostein.framework.dragonfly.Button;
-	import nemostein.framework.dragonfly.Entity;
-	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
+	import nemostein.framework.dragonfly.modules.container.entity.AnchorAlign;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
+	import nemostein.framework.dragonfly.modules.text.ShadowedText;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.buttons.AssetStatesGameplayHudButtonsSmall1down;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.buttons.AssetStatesGameplayHudButtonsSmall1up;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.buttons.AssetStatesGameplayHudButtonsSmall2down;

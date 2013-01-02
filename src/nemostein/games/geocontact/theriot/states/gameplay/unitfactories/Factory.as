@@ -1,9 +1,5 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 {
-	import flash.geom.Point;
-	import flash.utils.getQualifiedClassName;
-	import nemostein.framework.dragonfly.Entity;
-	import nemostein.framework.dragonfly.io.MouseAware;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
 	import nemostein.utils.ErrorUtils;
 	
@@ -48,17 +44,17 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			}
 		}
 		
-		public function destroy():void 
+		public function destroy():void
 		{
- 			
+		
 		}
 		
-		public function getAssemblyTime():Number 
+		public function getAssemblyTime():Number
 		{
 			return _assemblyTime;
 		}
 		
-		public function getAssemblyDelay():Number 
+		public function getAssemblyDelay():Number
 		{
 			return 100 / stats.assembyRate;
 		}
@@ -68,7 +64,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			return _complex.ai;
 		}
 		
-		public function get name():String 
+		public function get name():String
 		{
 			return _name;
 		}

@@ -1,10 +1,8 @@
 package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
-	import nemostein.framework.dragonfly.AnchorAlign;
-	import nemostein.framework.dragonfly.Container;
-	import nemostein.framework.dragonfly.Entity;
-	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
-	import nemostein.framework.dragonfly.Text;
+	import nemostein.framework.dragonfly.modules.container.Container;
+	import nemostein.framework.dragonfly.modules.container.entity.AnchorAlign;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.AssetStatesGameplayHudBase;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsArmor;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsAssemblyCost;
@@ -17,12 +15,6 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsRange;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsRate;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsSpeed;
-	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs0;
-	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs1;
-	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs2;
-	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs3;
-	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs4;
-	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs5;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Factory;
 	
@@ -170,7 +162,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		{
 			var factories:Vector.<Factory> = GamePlay.service.complexPlayer.factories;
 			
-			for (var i:int = 0; i < factories.length; ++i) 
+			for (var i:int = 0; i < factories.length; ++i)
 			{
 				var factory:Factory = factories[i];
 				if (factory)
@@ -197,9 +189,9 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			
 			var upgrades:Container = new Container();
 			var buildButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsBuild);
-			var lockedText:ShadowedText = new ShadowedText("This factory is Locked\rBuy Factory $$ to unlock", "Lead III", 8, 0xffc0e5f0, Text.CENTER);
+			var lockText:FactoryLockText = new FactoryLockText();
 			
-			lockedText.alignAnchor(AnchorAlign.CENTER, AnchorAlign.CENTER);
+			lockText.alignAnchor(AnchorAlign.CENTER, AnchorAlign.CENTER);
 			
 			rangeButton.x = 11;
 			rangeButton.y = 416;
@@ -228,8 +220,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			buildButton.x = 121;
 			buildButton.y = 502;
 			
-			lockedText.x = 93;
-			lockedText.y = 480;
+			lockText.x = 93;
+			lockText.y = 480;
 			
 			upgrades.add(rangeButton);
 			upgrades.add(rateButton);
@@ -242,11 +234,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			
 			upgrades.hide();
 			buildButton.hide();
-			lockedText.hide();
+			lockText.hide();
 			
 			add(upgrades);
 			add(buildButton);
-			add(lockedText);
+			add(lockText);
 		}
 	}
 }

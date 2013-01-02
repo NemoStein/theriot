@@ -1,16 +1,13 @@
 package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
-	import flash.display.BitmapData;
 	import flash.geom.Point;
-	import nemostein.framework.dragonfly.AnchorAlign;
 	import nemostein.framework.dragonfly.Button;
-	import nemostein.framework.dragonfly.Entity;
-	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
-	import nemostein.framework.dragonfly.Text;
+	import nemostein.framework.dragonfly.modules.container.entity.AnchorAlign;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
+	import nemostein.framework.dragonfly.modules.text.ShadowedText;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.buttons.AssetStatesGameplayHudButtonsBigdown;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.buttons.AssetStatesGameplayHudButtonsBigup;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsPlus;
-	import nemostein.utils.ErrorUtils;
 	
 	public class UpgradeButton extends Button
 	{

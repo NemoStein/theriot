@@ -2,7 +2,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
-	import nemostein.framework.dragonfly.Entity;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.weather.AssetStatesGameplayHudWeatherClear;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.weather.AssetStatesGameplayHudWeatherEletricalStorm;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.weather.AssetStatesGameplayHudWeatherFog;

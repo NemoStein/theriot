@@ -1,18 +1,16 @@
-package nemostein.games.geocontact.theriot.states.gameplay.hud 
+package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
-	import nemostein.framework.dragonfly.plugins.shadowedtext.ShadowedText;
-	import nemostein.framework.dragonfly.Text;
+	import nemostein.framework.dragonfly.modules.text.ShadowedText;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
 	
-
-	public class TimeElapsed extends ShadowedText 
+	public class TimeElapsed extends ShadowedText
 	{
-		public function TimeElapsed() 
+		public function TimeElapsed()
 		{
 			super("00:00.000", "Lead III", 8, 0xffc0e5f0);
 		}
 		
-		override protected function update():void 
+		override protected function update():void
 		{
 			var timeElapsed:int = GamePlay.service.getBattleElapsedTime();
 			

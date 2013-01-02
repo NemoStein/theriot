@@ -4,12 +4,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.leveltest
 	import flash.geom.Rectangle;
 	import nemostein.bezier.Paths;
 	import nemostein.bezier.PathService;
-	import nemostein.framework.dragonfly.Entity;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.levelTest.AssetStatesGameplayLevelTestBackground;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.levelTest.AssetStatesGameplayLevelTestPaths;
 	import nemostein.games.geocontact.theriot.states.gameplay.Level;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complexes.simplecomplex.SimpleComplex;
-	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.ComplexStats;
 	
 	public class LevelTest extends Level
 	{

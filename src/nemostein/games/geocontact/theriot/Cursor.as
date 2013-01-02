@@ -1,15 +1,13 @@
-package nemostein.games.geocontact.theriot 
+package nemostein.games.geocontact.theriot
 {
-	import flash.display.BitmapData;
-	import nemostein.framework.dragonfly.Entity;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
 	import nemostein.games.geocontact.theriot.assets.AssetCursor;
 	
-
-	public class Cursor extends Entity 
+	public class Cursor extends Entity
 	{
 		static public const DEFAULT:String = "default";
 		
-		override protected function initialize():void 
+		override protected function initialize():void
 		{
 			super.initialize();
 			

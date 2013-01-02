@@ -1,9 +1,8 @@
 package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
-	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import nemostein.framework.dragonfly.Button;
-	import nemostein.framework.dragonfly.Entity;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.buttons.AssetStatesGameplayHudButtonsSmall1down;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.buttons.AssetStatesGameplayHudButtonsSmall1up;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsOptions;
@@ -14,7 +13,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		private var _down:Entity;
 		private var _icon:Entity;
 		
-		override protected function initialize():void 
+		override protected function initialize():void
 		{
 			super.initialize();
 			
@@ -39,7 +38,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(_icon);
 		}
 		
-		override public function pressed(point:Point = null):void 
+		override public function pressed(point:Point = null):void
 		{
 			_up.hide();
 			_down.show();
@@ -49,7 +48,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			super.pressed(point);
 		}
 		
-		override public function released(point:Point = null):void 
+		override public function released(point:Point = null):void
 		{
 			_up.show();
 			_down.hide();

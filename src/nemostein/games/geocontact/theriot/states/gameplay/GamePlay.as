@@ -2,10 +2,10 @@ package nemostein.games.geocontact.theriot.states.gameplay
 {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import nemostein.framework.dragonfly.Container;
 	import nemostein.framework.dragonfly.Core;
-	import nemostein.framework.dragonfly.io.Keys;
-	import nemostein.framework.dragonfly.io.MouseAware;
+	import nemostein.framework.dragonfly.modules.container.Container;
+	import nemostein.framework.dragonfly.modules.io.Keys;
+	import nemostein.framework.dragonfly.modules.io.MouseAware;
 	
 	public class GamePlay extends Container implements MouseAware
 	{

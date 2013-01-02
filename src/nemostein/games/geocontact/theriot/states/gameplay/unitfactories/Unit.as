@@ -1,17 +1,14 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 {
-	import flash.geom.Point;
-	import flash.utils.getQualifiedClassName;
 	import nemostein.bezier.Path;
 	import nemostein.bezier.PathTracker;
-	import nemostein.framework.dragonfly.Animation;
-	import nemostein.framework.dragonfly.Entity;
-	import nemostein.framework.dragonfly.Game;
+	import nemostein.framework.dragonfly.modules.container.entity.AlphaEntity;
+	import nemostein.framework.dragonfly.modules.container.entity.Animation;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
 	import nemostein.utils.ErrorUtils;
 	import nemostein.utils.MathUtils;
 	
-	public class Unit extends Entity
+	public class Unit extends AlphaEntity
 	{
 		static public const AIR:String = "air";
 		static public const GROUND:String = "ground";
@@ -40,6 +37,9 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		private var _dying:Boolean;
 		private var _target:Unit;
 		private var _deathAnimation:int;
+		
+		private var _delayToFade:Number;
+		private var _timeToFade:Number;
 		
 		public var health:Number;
 		public var armor:Number;
@@ -75,12 +75,15 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			_reloadDelay = 100 / rate;
 			_rangeSquare = range * range;
 			
+			_delayToFade = 2.5;
+			_timeToFade = 0;
+			
 			_type = unitType;
 			
 			addAnimation(RUN, [0, 1, 2], 10);
 			addAnimation(FIRE, [3, 4, 5, 6], 10, false, fireAnimationCallback);
 			addAnimation(DIE, [7, 8, 9], 7, false, deathAnimationCallback);
-			addAnimation(DEAD, [10, 11], 5, true, deathAnimationCallback);
+			addAnimation(DEAD, [10, 11], 5);
 			
 			playAnimation(RUN);
 		}
@@ -99,17 +102,9 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		
 		private function deathAnimationCallback(animation:Animation, keyframe:int, cycle:Boolean):void
 		{
-			if (cycle)
+			if (cycle && animation.id == DIE)
 			{
-				if (animation.id == DIE)
-				{
-					playAnimation(DEAD);
-				}
-				else if (animation.id == DEAD && _deathAnimation++ == 5)
-				{
-					GamePlay.service.removeUnit(this);
-					super.die();
-				}
+				playAnimation(DEAD);
 			}
 		}
 		
@@ -197,6 +192,21 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 					else if (_lookingAt == DOWN)
 					{
 						frame.y = height * 2;
+					}
+				}
+			}
+			else if(animation.id == DEAD)
+			{
+				_timeToFade += time;
+				
+				if (_timeToFade >= _delayToFade)
+				{
+					alpha -= 0.75 * time;
+					
+					if (alpha <= 0)
+					{
+						GamePlay.service.removeUnit(this);
+						super.die();
 					}
 				}
 			}

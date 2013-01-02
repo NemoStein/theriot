@@ -7,8 +7,8 @@ package nemostein.games.geocontact.theriot.states.gameplay
 	import flash.geom.Rectangle;
 	import nemostein.bezier.Path;
 	import nemostein.bezier.Paths;
-	import nemostein.framework.dragonfly.Container;
-	import nemostein.framework.dragonfly.Entity;
+	import nemostein.framework.dragonfly.modules.container.Container;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
 	import nemostein.utils.ErrorUtils;
 	
@@ -93,7 +93,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 				graphics.lineTo(result.x, result.y);
 			}
 			
-			for each (var debugPath:Path in (!reverse ? path.forward : path.backward))
+			for each (var debugPath:Path in(!reverse ? path.forward : path.backward))
 			{
 				debugDrawPath(graphics, debugPath, reverse);
 			}

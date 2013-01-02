@@ -1,8 +1,8 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 {
 	import flash.geom.Point;
-	import nemostein.framework.dragonfly.Entity;
-	import nemostein.framework.dragonfly.io.MouseAware;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
+	import nemostein.framework.dragonfly.modules.io.MouseAware;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
 	
 	public class Complex extends Entity implements MouseAware

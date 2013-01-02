@@ -1,6 +1,6 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 {
-	import nemostein.framework.dragonfly.Entity;
+	import nemostein.framework.dragonfly.modules.container.entity.Entity;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
 	
 	public class Ammo extends Entity
