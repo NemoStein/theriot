@@ -3,7 +3,10 @@ package nemostein.games.geocontact.theriot.states.gameplay
 	import flash.geom.Rectangle;
 	import nemostein.framework.dragonfly.modules.container.Container;
 	import nemostein.framework.dragonfly.modules.io.Input;
+	import nemostein.games.geocontact.theriot.states.gameplay.hud.FactoryButton;
+	import nemostein.games.geocontact.theriot.states.gameplay.hud.FactoryLockText;
 	import nemostein.games.geocontact.theriot.states.gameplay.hud.HUD;
+	import nemostein.games.geocontact.theriot.states.gameplay.hud.UpgradeButton;
 	import nemostein.games.geocontact.theriot.states.gameplay.leveltest.LevelTest;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Ammo;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
@@ -22,6 +25,11 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		
 		private var _level:Level;
 		private var _hud:HUD;
+		
+		private var _factoryUpgrades:Container;
+		private var _factoryBuild:UpgradeButton;
+		private var _factoryLock:FactoryLockText;
+		private var _currentFactoryTab:FactoryButton;
 		
 		public var complexAI:Complex;
 		public var complexPlayer:Complex;
@@ -214,6 +222,54 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		public function getPlayerScraps():int
 		{
 			return 0;
+		}
+		
+		public function registerFactoryUpgrades(upgrades:Container, build:UpgradeButton, lock:FactoryLockText):void 
+		{
+			_factoryUpgrades = upgrades;
+			_factoryBuild = build;
+			_factoryLock = lock;
+			
+			_factoryUpgrades.hide();
+			_factoryBuild.hide();
+			//_factoryLock.hide();
+		}
+		
+		public function switchFactoryTabTo(factoryButton:FactoryButton):void 
+		{
+			if (_currentFactoryTab)
+			{
+				_currentFactoryTab.toggle(false);
+				
+				if (_currentFactoryTab.enabled)
+				{
+					_factoryUpgrades.hide();
+				}
+				else if (_currentFactoryTab.unlocked)
+				{
+					_factoryBuild.hide();
+				}
+				else
+				{
+					_factoryLock.hide();
+				}
+			}
+			
+			_currentFactoryTab = factoryButton;
+			_currentFactoryTab.toggle(true);
+			
+			if (_currentFactoryTab.enabled)
+			{
+				_factoryUpgrades.show();
+			}
+			else if (_currentFactoryTab.unlocked)
+			{
+				_factoryBuild.show();
+			}
+			else
+			{
+				_factoryLock.show();
+			}
 		}
 		
 		public function get level():Level

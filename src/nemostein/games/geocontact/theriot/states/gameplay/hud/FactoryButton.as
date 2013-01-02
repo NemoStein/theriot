@@ -17,6 +17,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs3;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs4;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs5;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Factory;
 	
 	public class FactoryButton extends Button
@@ -39,6 +40,9 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		private var _label:ShadowedText;
 		private var _slot:int;
 		
+		private var _enabled:Boolean;
+		private var _unlocked:Boolean;
+		
 		public function FactoryButton(factory:Factory, slot:int)
 		{
 			_factory = factory;
@@ -60,7 +64,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			_down.draw(new AssetStatesGameplayHudButtonsSmall3down().bitmapData);
 			
 			_label = new ShadowedText(_factory.name, "Lead III", 8, 0xffc0e5f0);
-			_label.setShadow( -1, 1, 0x80000000);
+			_label.setShadow(-1, 1, 0x80000000);
 			_label.alignAnchor(AnchorAlign.TOP, AnchorAlign.CENTER);
 			_label.x = 10;
 			_label.y = 6;
@@ -74,10 +78,31 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			width = _up.width;
 			height = _up.height;
 			
+			onExecute = execute;
+			
 			add(_tab);
 			add(_up);
 			add(_down);
 			add(_label);
+		}
+		
+		private function execute(point:Point):void 
+		{
+			GamePlay.service.switchFactoryTabTo(this);
+		}
+		
+		override protected function update():void 
+		{
+			if (!_unlocked && _factory.unlocked)
+			{
+				unlock();
+			}
+			else if (!_enabled && _factory.enabled)
+			{
+				enable();
+			}
+			
+			super.update();
 		}
 		
 		override public function pressed(point:Point = null):void
@@ -100,16 +125,42 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			super.released(point);
 		}
 		
-		public function enable():void 
+		public function toggle(on:Boolean):void 
+		{
+			if (on)
+			{
+				_tab.show();
+			}
+			else
+			{
+				_tab.hide();
+			}
+		}
+		
+		public function enable():void
 		{
 			_up.draw(new AssetStatesGameplayHudButtonsSmall1up().bitmapData);
 			_down.draw(new AssetStatesGameplayHudButtonsSmall1down().bitmapData);
+			
+			_enabled = true;
 		}
 		
-		public function unlock():void 
+		public function unlock():void
 		{
 			_up.draw(new AssetStatesGameplayHudButtonsSmall2up().bitmapData);
 			_down.draw(new AssetStatesGameplayHudButtonsSmall2down().bitmapData);
+			
+			_unlocked = true;
+		}
+		
+		public function get enabled():Boolean 
+		{
+			return _enabled;
+		}
+		
+		public function get unlocked():Boolean 
+		{
+			return _unlocked;
 		}
 	}
 }

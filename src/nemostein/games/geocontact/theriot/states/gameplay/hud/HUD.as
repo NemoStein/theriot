@@ -187,7 +187,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			var assemblyRateButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsAssemblyRate);
 			var assemblyCostButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsAssemblyCost);
 			
-			var upgrades:Container = new Container();
+			var upgrades:Entity = new Entity();
 			var buildButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsBuild);
 			var lockText:FactoryLockText = new FactoryLockText();
 			
@@ -232,9 +232,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			upgrades.add(assemblyRateButton);
 			upgrades.add(assemblyCostButton);
 			
-			upgrades.hide();
-			buildButton.hide();
-			lockText.hide();
+			GamePlay.service.registerFactoryUpgrades(upgrades, buildButton, lockText);
 			
 			add(upgrades);
 			add(buildButton);

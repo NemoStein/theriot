@@ -9,14 +9,18 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		
 		private var _complex:Complex;
 		private var _name:String;
+		private var _dependency:Factory;
 		
 		private var _assemblyReady:Boolean;
 		private var _assemblyTime:Number;
 		
-		public function Factory(complex:Complex, name:String)
+		private var _enabled:Boolean;
+		
+		public function Factory(complex:Complex, name:String, dependency:Factory = null)
 		{
 			_complex = complex;
 			_name = name;
+			_dependency = dependency;
 			
 			_assemblyTime = 0;
 		}
@@ -72,6 +76,26 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		protected function get unitClass():Class
 		{
 			throw ErrorUtils.abstractMethod(this, "Factory", "unitClass");
+		}
+		
+		public function enable():void 
+		{
+			_enabled = true;
+		}
+		
+		public function get enabled():Boolean
+		{
+			return _enabled;
+		}
+		
+		public function get unlocked():Boolean
+		{
+			if (!_dependency)
+			{
+				return true;
+			}
+			
+			return _dependency._enabled;
 		}
 	}
 }

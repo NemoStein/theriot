@@ -6,9 +6,9 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complex
 	
 	public class SimpleFactory extends Factory
 	{
-		public function SimpleFactory(complex:Complex)
+		public function SimpleFactory(complex:Complex, name:String, dependency:Factory = null)
 		{
-			super(complex, "C");
+			super(complex, name, dependency);
 			
 			stats = new FactoryStats();
 			
