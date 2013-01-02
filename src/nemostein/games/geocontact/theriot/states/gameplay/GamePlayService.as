@@ -232,7 +232,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			
 			_factoryUpgrades.hide();
 			_factoryBuild.hide();
-			//_factoryLock.hide();
+			_factoryLock.hide();
 		}
 		
 		public function switchFactoryTabTo(factoryButton:FactoryButton):void 
