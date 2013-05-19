@@ -86,12 +86,12 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(_label);
 		}
 		
-		private function execute(point:Point):void 
+		private function execute(point:Point):void
 		{
 			GamePlay.service.switchFactoryTabTo(this);
 		}
 		
-		override protected function update():void 
+		override protected function update():void
 		{
 			if (!_unlocked && _factory.unlocked)
 			{
@@ -125,7 +125,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			super.released(point);
 		}
 		
-		public function toggle(on:Boolean):void 
+		public function toggle(on:Boolean):void
 		{
 			if (on)
 			{
@@ -153,14 +153,19 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			_unlocked = true;
 		}
 		
-		public function get enabled():Boolean 
+		public function get enabled():Boolean
 		{
-			return _enabled;
+			return _factory.enabled;
 		}
 		
-		public function get unlocked():Boolean 
+		public function get unlocked():Boolean
 		{
-			return _unlocked;
+			return _factory.unlocked;
+		}
+		
+		public function get factory():Factory
+		{
+			return _factory;
 		}
 	}
 }

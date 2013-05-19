@@ -2,7 +2,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complex
 {
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Factory;
-	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.FactoryStats;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.FactoryStats;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.LinearStats;
 	
 	public class SimpleFactory extends Factory
 	{
@@ -12,23 +13,14 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complex
 			
 			stats = new FactoryStats();
 			
-			stats.assembyCost = 5;
-			stats.assembyRate = 10;
-			stats.unitHealth = 10;
-			stats.unitArmor = 0;
-			stats.unitSpeed = 35;
-			stats.unitPower = 2;
-			stats.unitRange = 85;
-			stats.unitRate = 50;
-			
-			//stats.assembyCost *= Math.random() * 0.8 + 0.6;
-			//stats.assembyRate *= Math.random() * 0.8 + 0.6;
-			//stats.unitHealth *= Math.random() * 0.8 + 0.6;
-			//stats.unitArmor *= Math.random() * 0.8 + 0.6;
-			//stats.unitSpeed *= Math.random() * 0.8 + 0.6;
-			//stats.unitPower *= Math.random() * 0.8 + 0.6;
-			//stats.unitRange *= Math.random() * 0.8 + 0.6;
-			//stats.unitRate *= Math.random() * 0.8 + 0.6;
+			stats.assembyCost = new LinearStats(5, 10, 1.1);
+			stats.assembyRate = new LinearStats(10, 10, 1.1);
+			stats.unitHealth = new LinearStats(10, 10, 1.1);
+			stats.unitArmor = new LinearStats(1, 10, 1.1);
+			stats.unitSpeed = new LinearStats(35, 10, 1.1);
+			stats.unitPower = new LinearStats(2, 10, 1.1);
+			stats.unitRange = new LinearStats(85, 10, 1.1);
+			stats.unitRate = new LinearStats(50, 10, 1.1);
 		}
 		
 		override protected function get unitClass():Class

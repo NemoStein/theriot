@@ -1,6 +1,7 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 {
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.FactoryStats;
 	import nemostein.utils.ErrorUtils;
 	
 	public class Factory
@@ -13,6 +14,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		
 		private var _assemblyReady:Boolean;
 		private var _assemblyTime:Number;
+		private var _assembyDelay:Number;
 		
 		private var _enabled:Boolean;
 		
@@ -20,37 +22,48 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		{
 			_complex = complex;
 			_name = name;
-			_dependency = dependency;
 			
+			if(dependency)
+			{
+				_dependency = dependency;
+			}
+			else
+			{
+				enable();
+			}
+			
+			_assembyDelay = 0;
 			_assemblyTime = 0;
 		}
 		
 		public function update(time:Number):void
 		{
-			if (!_assemblyReady)
+			if (_enabled)
 			{
-				_assemblyTime += time;
-				
-				var assembyDelay:Number = 100 / stats.assembyRate;
-				
-				if (_assemblyTime >= assembyDelay)
+				if (!_assemblyReady)
 				{
-					_assemblyTime -= assembyDelay;
-					_assemblyReady = true;
+					_assemblyTime += time;
+					
+					if (_assemblyTime >= _assembyDelay)
+					{
+						_assemblyTime -= _assembyDelay;
+						_assembyDelay = 100 / stats.assembyRate.value;
+						_assemblyReady = true;
+					}
 				}
-			}
-			
-			if (_assemblyReady && _complex.drain(stats.assembyCost))
-			{
-				GamePlay.service.addUnit(new unitClass(this));
 				
-				_assemblyReady = false;
+				if (_assemblyReady && _complex.drain(stats.assembyCost.value))
+				{
+					GamePlay.service.addUnit(new unitClass(this));
+					
+					_assemblyReady = false;
+				}
 			}
 		}
 		
 		public function destroy():void
 		{
-		
+			
 		}
 		
 		public function getAssemblyTime():Number
@@ -60,7 +73,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		
 		public function getAssemblyDelay():Number
 		{
-			return 100 / stats.assembyRate;
+			return 100 / stats.assembyRate.value;
 		}
 		
 		public function get ai():Boolean
@@ -78,7 +91,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			throw ErrorUtils.abstractMethod(this, "Factory", "unitClass");
 		}
 		
-		public function enable():void 
+		public function enable():void
 		{
 			_enabled = true;
 		}

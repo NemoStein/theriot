@@ -1,5 +1,6 @@
 package nemostein.games.geocontact.theriot.states.gameplay
 {
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import nemostein.framework.dragonfly.modules.container.Container;
 	import nemostein.framework.dragonfly.modules.io.Input;
@@ -10,6 +11,9 @@ package nemostein.games.geocontact.theriot.states.gameplay
 	import nemostein.games.geocontact.theriot.states.gameplay.leveltest.LevelTest;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Ammo;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.ComplexStats;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.FactoryStats;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.Stats;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Unit;
 	
 	public class GamePlayService
@@ -26,10 +30,25 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		private var _level:Level;
 		private var _hud:HUD;
 		
-		private var _factoryUpgrades:Container;
-		private var _factoryBuild:UpgradeButton;
-		private var _factoryLock:FactoryLockText;
 		private var _currentFactoryTab:FactoryButton;
+		
+		private var _complexEnergyLimit:UpgradeButton;
+		private var _complexEnergyRecharge:UpgradeButton;
+		
+		private var _turretRange:UpgradeButton;
+		private var _turretRate:UpgradeButton;
+		private var _turretPower:UpgradeButton;
+		
+		private var _factoryRange:UpgradeButton;
+		private var _factoryRate:UpgradeButton;
+		private var _factoryPower:UpgradeButton;
+		private var _factorySpeed:UpgradeButton;
+		private var _factoryArmor:UpgradeButton;
+		private var _factoryHealth:UpgradeButton;
+		private var _factoryAssemblyRate:UpgradeButton;
+		private var _factoryAssemblyCost:UpgradeButton;
+		private var _factoryBuild:UpgradeButton;
+		private var _factoryLockText:FactoryLockText;
 		
 		public var complexAI:Complex;
 		public var complexPlayer:Complex;
@@ -177,7 +196,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			complex.hit(unit.health);
 		}
 		
-		public function complexDestroyed(complex:Complex):void 
+		public function complexDestroyed(complex:Complex):void
 		{
 			if (complex.ai)
 			{
@@ -189,12 +208,12 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function playerVictory():void 
+		private function playerVictory():void
 		{
 			loadLevel(LevelTest);
 		}
 		
-		private function playerDefeat():void 
+		private function playerDefeat():void
 		{
 			loadLevel(LevelTest);
 		}
@@ -219,40 +238,101 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			return 0.25;
 		}
 		
-		public function getPlayerScraps():int
+		public function getPlayerMetal():Number
 		{
-			return 0;
+			return complexPlayer.metal;
 		}
 		
-		public function registerFactoryUpgrades(upgrades:Container, build:UpgradeButton, lock:FactoryLockText):void 
+		public function getAIMetal():Number
 		{
-			_factoryUpgrades = upgrades;
-			_factoryBuild = build;
-			_factoryLock = lock;
+			return complexAI.metal;
+		}
+		
+		public function get level():Level
+		{
+			return _level;
+		}
+		
+		public function registerComplexUpgrades(energyLimit:UpgradeButton, energyRecharge:UpgradeButton):void
+		{
+			_complexEnergyLimit = energyLimit;
+			_complexEnergyRecharge = energyRecharge;
 			
-			_factoryUpgrades.hide();
-			_factoryBuild.hide();
-			_factoryLock.hide();
+			var stats:ComplexStats = complexPlayer.stats;
+			
+			_complexEnergyLimit.value = stats.energyLimit.value;
+			_complexEnergyLimit.price = stats.energyLimit.price;
+			
+			_complexEnergyRecharge.value = stats.energyRecharge.value;
+			_complexEnergyRecharge.price = stats.energyRecharge.price;
+			
+			_complexEnergyLimit.onExecute = complexEnergyLimitOnExecute;
+			_complexEnergyRecharge.onExecute = complexEnergyRechargeOnExecute;
 		}
 		
-		public function switchFactoryTabTo(factoryButton:FactoryButton):void 
+		public function registerTurretUpgrades(range:UpgradeButton, rate:UpgradeButton, power:UpgradeButton):void
+		{
+			_turretRange = range;
+			_turretRate = rate;
+			_turretPower = power;
+			
+			var stats:ComplexStats = complexPlayer.stats;
+			
+			_turretRange.value = stats.turretRange.value;
+			_turretRange.price = stats.turretRange.price;
+			
+			_turretRate.value = stats.turretRate.value;
+			_turretRate.price = stats.turretRate.price;
+			
+			_turretPower.value = stats.turretPower.value;
+			_turretPower.price = stats.turretPower.price;
+			
+			_turretRange.onExecute = turretRangeOnExecute;
+			_turretRate.onExecute = turretRateOnExecute;
+			_turretPower.onExecute = turretPowerOnExecute;
+		}
+		
+		public function registerFactoryUpgrades(range:UpgradeButton, rate:UpgradeButton, power:UpgradeButton, speed:UpgradeButton, armor:UpgradeButton, health:UpgradeButton, assemblyRate:UpgradeButton, assemblyCost:UpgradeButton, build:UpgradeButton, lockText:FactoryLockText):void
+		{
+			_factoryRange = range;
+			_factoryRate = rate;
+			_factoryPower = power;
+			_factorySpeed = speed;
+			_factoryArmor = armor;
+			_factoryHealth = health;
+			_factoryAssemblyRate = assemblyRate;
+			_factoryAssemblyCost = assemblyCost;
+			_factoryBuild = build;
+			_factoryLockText = lockText;
+			
+			_factoryRange.onExecute = factoryRangeOnExecute;
+			_factoryRate.onExecute = factoryRateOnExecute;
+			_factoryPower.onExecute = factoryPowerOnExecute;
+			_factorySpeed.onExecute = factorySpeedOnExecute;
+			_factoryArmor.onExecute = factoryArmorOnExecute;
+			_factoryHealth.onExecute = factoryHealthOnExecute;
+			_factoryAssemblyRate.onExecute = factoryAssemblyRateOnExecute;
+			_factoryAssemblyCost.onExecute = factoryAssemblyCostOnExecute;
+			_factoryBuild.onExecute = factoryBuildOnExecute;
+			
+			_factoryRange.hide();
+			_factoryRate.hide();
+			_factoryPower.hide();
+			_factorySpeed.hide();
+			_factoryArmor.hide();
+			_factoryHealth.hide();
+			_factoryAssemblyRate.hide();
+			_factoryAssemblyCost.hide();
+			_factoryBuild.hide();
+			_factoryLockText.hide();
+		}
+		
+		public function switchFactoryTabTo(factoryButton:FactoryButton):void
 		{
 			if (_currentFactoryTab)
 			{
+				hideFactoryButtons();
 				_currentFactoryTab.toggle(false);
-				
-				if (_currentFactoryTab.enabled)
-				{
-					_factoryUpgrades.hide();
-				}
-				else if (_currentFactoryTab.unlocked)
-				{
-					_factoryBuild.hide();
-				}
-				else
-				{
-					_factoryLock.hide();
-				}
 			}
 			
 			_currentFactoryTab = factoryButton;
@@ -260,21 +340,310 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			
 			if (_currentFactoryTab.enabled)
 			{
-				_factoryUpgrades.show();
+				_factoryRange.show();
+				_factoryRate.show();
+				_factoryPower.show();
+				_factorySpeed.show();
+				_factoryArmor.show();
+				_factoryHealth.show();
+				_factoryAssemblyRate.show();
+				_factoryAssemblyCost.show();
+				
+				var stats:FactoryStats = _currentFactoryTab.factory.stats;
+				
+				_factoryRange.value = stats.unitRange.value;
+				_factoryRange.price = stats.unitRange.price;
+				
+				_factoryRate.value = stats.unitRate.value;
+				_factoryRate.price = stats.unitRate.price;
+				
+				_factoryPower.value = stats.unitPower.value;
+				_factoryPower.price = stats.unitPower.price;
+				
+				_factorySpeed.value = stats.unitSpeed.value;
+				_factorySpeed.price = stats.unitSpeed.price;
+				
+				_factoryArmor.value = stats.unitArmor.value;
+				_factoryArmor.price = stats.unitArmor.price;
+				
+				_factoryHealth.value = stats.unitHealth.value;
+				_factoryHealth.price = stats.unitHealth.price;
+				
+				_factoryAssemblyRate.value = stats.assembyRate.value;
+				_factoryAssemblyRate.price = stats.assembyRate.price;
+				
+				_factoryAssemblyCost.value = stats.assembyCost.value;
+				_factoryAssemblyCost.price = stats.assembyCost.price;
 			}
 			else if (_currentFactoryTab.unlocked)
 			{
 				_factoryBuild.show();
+				_factoryBuild.price = 50;
 			}
 			else
 			{
-				_factoryLock.show();
+				_factoryLockText.show();
 			}
 		}
 		
-		public function get level():Level
+		public function giveMetal(metal:Number, toAI:Boolean):void
 		{
-			return _level;
+			if (toAI)
+			{
+				complexAI.addMetal(metal);
+			}
+			else
+			{
+				complexPlayer.addMetal(metal);
+			}
+		}
+		
+		public function takeMetal(metal:Number, toAI:Boolean):void
+		{
+			if (toAI)
+			{
+				complexAI.addMetal(-metal);
+			}
+			else
+			{
+				complexPlayer.addMetal(-metal);
+			}
+		}
+		
+		private function hideFactoryButtons():void
+		{
+			_factoryRange.hide();
+			_factoryRate.hide();
+			_factoryPower.hide();
+			_factorySpeed.hide();
+			_factoryArmor.hide();
+			_factoryHealth.hide();
+			_factoryAssemblyRate.hide();
+			_factoryAssemblyCost.hide();
+			
+			_factoryBuild.hide();
+			
+			_factoryLockText.hide();
+		}
+		
+		private function complexEnergyLimitOnExecute(point:Point):void
+		{
+			var stats:Stats = complexPlayer.stats.energyLimit;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_complexEnergyLimit.value = stats.value;
+				_complexEnergyLimit.price = stats.price;
+			}
+		}
+		
+		private function complexEnergyRechargeOnExecute(point:Point):void
+		{
+			var stats:Stats = complexPlayer.stats.energyRecharge;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_complexEnergyRecharge.value = stats.value;
+				_complexEnergyRecharge.price = stats.price;
+			}
+		}
+		
+		private function turretRangeOnExecute(point:Point):void
+		{
+			var stats:Stats = complexPlayer.stats.turretRange;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_turretRange.value = stats.value;
+				_turretRange.price = stats.price;
+			}
+		}
+		
+		private function turretRateOnExecute(point:Point):void
+		{
+			var stats:Stats = complexPlayer.stats.turretRate;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_turretRate.value = stats.value;
+				_turretRate.price = stats.price;
+			}
+		}
+		
+		private function turretPowerOnExecute(point:Point):void
+		{
+			var stats:Stats = complexPlayer.stats.turretPower;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_turretPower.value = stats.value;
+				_turretPower.price = stats.price;
+			}
+		}
+		
+		private function factoryRangeOnExecute(point:Point):void
+		{
+			var stats:Stats = _currentFactoryTab.factory.stats.unitRange;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_factoryRange.value = stats.value;
+				_factoryRange.price = stats.price;
+			}
+		}
+		
+		private function factoryRateOnExecute(point:Point):void
+		{
+			var stats:Stats = _currentFactoryTab.factory.stats.unitRate;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_factoryRate.value = stats.value;
+				_factoryRate.price = stats.price;
+			}
+		}
+		
+		private function factoryPowerOnExecute(point:Point):void
+		{
+			var stats:Stats = _currentFactoryTab.factory.stats.unitPower;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_factoryPower.value = stats.value;
+				_factoryPower.price = stats.price
+			}
+		}
+		
+		private function factorySpeedOnExecute(point:Point):void
+		{
+			var stats:Stats = _currentFactoryTab.factory.stats.unitSpeed;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_factorySpeed.value = stats.value;
+				_factorySpeed.price = stats.price
+			}
+		}
+		
+		private function factoryArmorOnExecute(point:Point):void
+		{
+			var stats:Stats = _currentFactoryTab.factory.stats.unitArmor;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_factoryArmor.value = stats.value;
+				_factoryArmor.price = stats.price;
+			}
+		}
+		
+		private function factoryHealthOnExecute(point:Point):void
+		{
+			var stats:Stats = _currentFactoryTab.factory.stats.unitHealth;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_factoryHealth.value = stats.value;
+				_factoryHealth.price = stats.price;
+			}
+		}
+		
+		private function factoryAssemblyRateOnExecute(point:Point):void
+		{
+			var stats:Stats = _currentFactoryTab.factory.stats.assembyRate;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_factoryAssemblyRate.value = stats.value;
+				_factoryAssemblyRate.price = stats.price;
+			}
+		}
+		
+		private function factoryAssemblyCostOnExecute(point:Point):void
+		{
+			var stats:Stats = _currentFactoryTab.factory.stats.assembyCost;
+			
+			var price:Number = stats.calculateNextPrice();
+			if (playerHaveMetal(price))
+			{
+				takeMetal(price, false);
+				
+				stats.upgrade();
+				
+				_factoryAssemblyCost.value = stats.value;
+				_factoryAssemblyCost.price = stats.price;
+			}
+		}
+		
+		private function factoryBuildOnExecute(point:Point):void
+		{
+			_currentFactoryTab.factory.enable();
+			
+			switchFactoryTabTo(_currentFactoryTab);
+		}
+		
+		private function playerHaveMetal(price:Number):Boolean
+		{
+			return getPlayerMetal() >= price;
 		}
 	}
 }

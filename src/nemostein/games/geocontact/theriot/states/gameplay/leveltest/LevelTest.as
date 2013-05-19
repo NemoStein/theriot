@@ -27,12 +27,12 @@ package nemostein.games.geocontact.theriot.states.gameplay.leveltest
 			return PathService.resolvePaths(new AssetStatesGameplayLevelTestPaths());
 		}
 		
-		override protected function get levelBackground():Entity 
+		override protected function get levelBackground():Entity
 		{
 			return _background;
 		}
 		
-		override protected function get levelBounds():Rectangle 
+		override protected function get levelBounds():Rectangle
 		{
 			return new Rectangle(0, 0, _background.width, _background.height);
 		}
@@ -45,6 +45,16 @@ package nemostein.games.geocontact.theriot.states.gameplay.leveltest
 		override protected function get complexAIClass():Class
 		{
 			return SimpleComplex;
+		}
+		
+		override protected function get initialMetalPlayer():int
+		{
+			return 200;
+		}
+		
+		override protected function get initialMetalAI():int
+		{
+			return 200;
 		}
 		
 		override public function get slotPlayer():Point

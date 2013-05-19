@@ -5,6 +5,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 	import nemostein.framework.dragonfly.modules.container.entity.AlphaEntity;
 	import nemostein.framework.dragonfly.modules.container.entity.Animation;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.FactoryStats;
 	import nemostein.utils.ErrorUtils;
 	import nemostein.utils.MathUtils;
 	
@@ -40,6 +41,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		
 		private var _delayToFade:Number;
 		private var _timeToFade:Number;
+		private var _metal:Number;
 		
 		public var health:Number;
 		public var armor:Number;
@@ -63,12 +65,14 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			
 			var stats:FactoryStats = _factory.stats;
 			
-			health = stats.unitHealth;
-			armor = stats.unitArmor;
-			speed = stats.unitSpeed;
-			power = stats.unitPower;
-			range = stats.unitRange;
-			rate = stats.unitRate;
+			health = stats.unitHealth.value;
+			armor = stats.unitArmor.value;
+			speed = stats.unitSpeed.value;
+			power = stats.unitPower.value;
+			range = stats.unitRange.value;
+			rate = stats.unitRate.value;
+			
+			_metal = 15;
 			
 			_reloading = false;
 			_reloadTime = 0;
@@ -97,7 +101,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			else if (cycle)
 			{
 				_target = null;
-			} 
+			}
 		}
 		
 		private function deathAnimationCallback(animation:Animation, keyframe:int, cycle:Boolean):void
@@ -231,6 +235,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			
 			health -= damage;
 			
+			trace(id, power.toFixed(3), damage.toFixed(3), health.toFixed(3));
+			
 			if (health < 0)
 			{
 				die();
@@ -265,6 +271,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			{
 				_dying = true;
 				playAnimation(DIE, false);
+				
+				GamePlay.service.giveMetal(_metal, !ai);
 			}
 		}
 		

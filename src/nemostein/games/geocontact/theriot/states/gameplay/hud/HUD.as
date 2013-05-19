@@ -1,8 +1,9 @@
 package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
-	import nemostein.framework.dragonfly.modules.container.Container;
+	import flash.geom.Point;
 	import nemostein.framework.dragonfly.modules.container.entity.AnchorAlign;
 	import nemostein.framework.dragonfly.modules.container.entity.Entity;
+	import nemostein.framework.dragonfly.modules.io.MouseAware;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.AssetStatesGameplayHudBase;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsArmor;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsAssemblyCost;
@@ -16,15 +17,25 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsRate;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsSpeed;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayService;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Factory;
+	import nemostein.utils.MathUtils;
 	
-	public class HUD extends Entity
+	public class HUD extends Entity implements MouseAware
 	{
+		private var _service:GamePlayService;
+		private var _hitArea:Vector.<Point>;
+		private var _firstFactoryButton:FactoryButton;
+		
 		override protected function initialize():void
 		{
 			super.initialize();
 			
 			setParallax(0, 0);
+			
+			_service = GamePlay.service;
+			
+			buildHitArea();
 			
 			addBase();
 			addOptionsButton();
@@ -33,11 +44,26 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			addControlBar();
 			addMinimap();
 			addEnergyBar();
-			addScrapsIndicator();
+			addMetalIndicator();
 			addComplexUpgrades();
 			addTurretUpgrades();
 			addFactoryTabs();
 			addFactoryUpgrades();
+			
+			switchToFirstTab();
+		}
+		
+		private function buildHitArea():void
+		{
+			_hitArea = new Vector.<Point>();
+			
+			_hitArea.push(new Point(0, 0));
+			_hitArea.push(new Point(215, 0));
+			_hitArea.push(new Point(200, 15));
+			_hitArea.push(new Point(200, 166));
+			_hitArea.push(new Point(186, 179));
+			_hitArea.push(new Point(186, 600));
+			_hitArea.push(new Point(0, 600));
 		}
 		
 		private function addBase():void
@@ -113,14 +139,14 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(energyBar);
 		}
 		
-		private function addScrapsIndicator():void
+		private function addMetalIndicator():void
 		{
-			var scrapsIndicator:ScrapsIndicator = new ScrapsIndicator();
+			var metalIndicator:MetalIndicator = new MetalIndicator();
 			
-			scrapsIndicator.x = 48;
-			scrapsIndicator.y = 218;
+			metalIndicator.x = 48;
+			metalIndicator.y = 218;
 			
-			add(scrapsIndicator);
+			add(metalIndicator);
 		}
 		
 		private function addComplexUpgrades():void
@@ -133,6 +159,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			
 			energyRechargeButton.x = 66;
 			energyRechargeButton.y = 252;
+			
+			_service.registerComplexUpgrades(energyLimitButton, energyRechargeButton);
 			
 			add(energyLimitButton);
 			add(energyRechargeButton);
@@ -153,6 +181,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			powerButton.x = 121;
 			powerButton.y = 319;
 			
+			_service.registerTurretUpgrades(rangeButton, rateButton, powerButton);
+			
 			add(rangeButton);
 			add(rateButton);
 			add(powerButton);
@@ -160,7 +190,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		private function addFactoryTabs():void
 		{
-			var factories:Vector.<Factory> = GamePlay.service.complexPlayer.factories;
+			var factories:Vector.<Factory> = _service.complexPlayer.factories;
 			
 			for (var i:int = 0; i < factories.length; ++i)
 			{
@@ -172,6 +202,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 					
 					factoryButton.x = 11 + i * 25;
 					factoryButton.y = 386;
+					
+					if (i == 0)
+					{
+						_firstFactoryButton = factoryButton;
+					}
 				}
 			}
 		}
@@ -186,11 +221,10 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			var healthButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsHealth);
 			var assemblyRateButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsAssemblyRate);
 			var assemblyCostButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsAssemblyCost);
-			
-			var upgrades:Entity = new Entity();
 			var buildButton:UpgradeButton = new UpgradeButton(AssetStatesGameplayHudIconsBuild);
 			var lockText:FactoryLockText = new FactoryLockText();
 			
+			buildButton.hideValue();
 			lockText.alignAnchor(AnchorAlign.CENTER, AnchorAlign.CENTER);
 			
 			rangeButton.x = 11;
@@ -223,20 +257,33 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			lockText.x = 93;
 			lockText.y = 480;
 			
-			upgrades.add(rangeButton);
-			upgrades.add(rateButton);
-			upgrades.add(powerButton);
-			upgrades.add(speedButton);
-			upgrades.add(armorButton);
-			upgrades.add(healthButton);
-			upgrades.add(assemblyRateButton);
-			upgrades.add(assemblyCostButton);
+			_service.registerFactoryUpgrades(rangeButton, rateButton, powerButton, speedButton, armorButton, healthButton, assemblyRateButton, assemblyCostButton, buildButton, lockText);
 			
-			GamePlay.service.registerFactoryUpgrades(upgrades, buildButton, lockText);
-			
-			add(upgrades);
+			add(rangeButton);
+			add(rateButton);
+			add(powerButton);
+			add(speedButton);
+			add(armorButton);
+			add(healthButton);
+			add(assemblyRateButton);
+			add(assemblyCostButton);
 			add(buildButton);
 			add(lockText);
+		}
+		
+		private function switchToFirstTab():void
+		{
+			GamePlay.service.switchFactoryTabTo(_firstFactoryButton);
+		}
+		
+		public function onMouseDown(key:int, mouse:Point):Boolean
+		{
+			return !MathUtils.isInsidePolygon(_hitArea, mouse);
+		}
+		
+		public function onMouseUp(key:int, mouse:Point):Boolean
+		{
+			return true;
 		}
 	}
 }

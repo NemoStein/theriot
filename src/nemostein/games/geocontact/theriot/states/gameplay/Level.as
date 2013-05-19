@@ -9,11 +9,14 @@ package nemostein.games.geocontact.theriot.states.gameplay
 	import nemostein.bezier.Paths;
 	import nemostein.framework.dragonfly.modules.container.Container;
 	import nemostein.framework.dragonfly.modules.container.entity.Entity;
+	import nemostein.framework.dragonfly.modules.io.Keys;
+	import nemostein.framework.dragonfly.modules.io.MouseAware;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
 	import nemostein.utils.ErrorUtils;
 	
-	public class Level extends Container
+	public class Level extends Container implements MouseAware
 	{
+		private var _scrolling:Boolean;
 		private var _paths:Paths;
 		
 		override protected function initialize():void
@@ -51,7 +54,40 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			return _paths.getPath(reverse, index);
 		}
 		
-		//{ Debug Draw
+		override protected function update():void
+		{
+			if (_scrolling)
+			{
+				var mouseDelta:Point = input.mouseDelta;
+				
+				camera.x -= mouseDelta.x;
+				camera.y -= mouseDelta.y;
+			}
+			
+			super.update();
+		}
+		
+		public function onMouseDown(key:int, mouse:Point):Boolean
+		{
+			if (key == Keys.LEFT_MOUSE)
+			{
+				_scrolling = true;
+				return false;
+			}
+			
+			return true;
+		}
+		
+		public function onMouseUp(key:int, mouse:Point):Boolean
+		{
+			if (key == Keys.LEFT_MOUSE)
+			{
+				_scrolling = false;
+				return false;
+			}
+			
+			return true;
+		}
 		
 		private function debugDrawPaths():void
 		{
@@ -126,6 +162,16 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		protected function get complexAIClass():Class
 		{
 			throw ErrorUtils.abstractMethod(this, "Level", "complexAIClass");
+		}
+		
+		protected function get initialMetalPlayer():int
+		{
+			throw ErrorUtils.abstractMethod(this, "Level", "initialMetalPlayer");
+		}
+		
+		protected function get initialMetalAI():int
+		{
+			throw ErrorUtils.abstractMethod(this, "Level", "initialMetalAI");
 		}
 		
 		public function get slotPlayer():Point

@@ -8,6 +8,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.buttons.AssetStatesGameplayHudButtonsBigdown;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.buttons.AssetStatesGameplayHudButtonsBigup;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsPlus;
+	import nemostein.utils.MathUtils;
 	
 	public class UpgradeButton extends Button
 	{
@@ -73,6 +74,21 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			add(_price);
 			add(_value);
 			add(_icon);
+		}
+		
+		public function set price(value:int):void 
+		{
+			_price.text = "$" + value;
+		}
+		
+		public function set value(value:Number):void 
+		{
+			_value.text = MathUtils.round(value, 2) + "";
+		}
+		
+		public function hideValue():void 
+		{
+			_value.hide();
 		}
 		
 		override public function pressed(point:Point = null):void
