@@ -2,8 +2,6 @@ package
 {
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
@@ -17,21 +15,21 @@ package
 			
 			loaderInfo.addEventListener(ProgressEvent.PROGRESS, progress);
 			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
-			
+		
 			// TODO show loader
 		}
 		
-		private function ioError(e:IOErrorEvent):void
+		private function ioError(event:IOErrorEvent):void
 		{
-			trace(e.text);
+			trace(event.text);
 		}
 		
-		private function progress(e:ProgressEvent):void
+		private function progress(event:ProgressEvent):void
 		{
 			// TODO update loader
 		}
 		
-		private function checkFrame(e:Event):void
+		private function checkFrame(event:Event):void
 		{
 			if (currentFrame == totalFrames)
 			{

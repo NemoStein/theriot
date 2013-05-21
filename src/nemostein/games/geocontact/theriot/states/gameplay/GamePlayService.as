@@ -18,7 +18,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 	
 	public class GamePlayService
 	{
-		private var _gamePlay:GamePlay;
+		private var _gamePlay:GamePlayScreen;
 		private var _input:Input;
 		
 		private var _levelLayer:Container;
@@ -53,7 +53,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		public var complexAI:Complex;
 		public var complexPlayer:Complex;
 		
-		public function GamePlayService(gamePlay:GamePlay, input:Input)
+		public function GamePlayService(gamePlay:GamePlayScreen, input:Input)
 		{
 			_gamePlay = gamePlay;
 			_input = input;
@@ -426,7 +426,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			_factoryLockText.hide();
 		}
 		
-		private function complexEnergyLimitOnExecute(point:Point):void
+		private function complexEnergyLimitOnExecute():void
 		{
 			var stats:Stats = complexPlayer.stats.energyLimit;
 			
@@ -442,7 +442,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function complexEnergyRechargeOnExecute(point:Point):void
+		private function complexEnergyRechargeOnExecute():void
 		{
 			var stats:Stats = complexPlayer.stats.energyRecharge;
 			
@@ -458,7 +458,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function turretRangeOnExecute(point:Point):void
+		private function turretRangeOnExecute():void
 		{
 			var stats:Stats = complexPlayer.stats.turretRange;
 			
@@ -474,7 +474,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function turretRateOnExecute(point:Point):void
+		private function turretRateOnExecute():void
 		{
 			var stats:Stats = complexPlayer.stats.turretRate;
 			
@@ -490,7 +490,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function turretPowerOnExecute(point:Point):void
+		private function turretPowerOnExecute():void
 		{
 			var stats:Stats = complexPlayer.stats.turretPower;
 			
@@ -506,7 +506,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function factoryRangeOnExecute(point:Point):void
+		private function factoryRangeOnExecute():void
 		{
 			var stats:Stats = _currentFactoryTab.factory.stats.unitRange;
 			
@@ -522,7 +522,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function factoryRateOnExecute(point:Point):void
+		private function factoryRateOnExecute():void
 		{
 			var stats:Stats = _currentFactoryTab.factory.stats.unitRate;
 			
@@ -538,7 +538,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function factoryPowerOnExecute(point:Point):void
+		private function factoryPowerOnExecute():void
 		{
 			var stats:Stats = _currentFactoryTab.factory.stats.unitPower;
 			
@@ -554,7 +554,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function factorySpeedOnExecute(point:Point):void
+		private function factorySpeedOnExecute():void
 		{
 			var stats:Stats = _currentFactoryTab.factory.stats.unitSpeed;
 			
@@ -570,7 +570,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function factoryArmorOnExecute(point:Point):void
+		private function factoryArmorOnExecute():void
 		{
 			var stats:Stats = _currentFactoryTab.factory.stats.unitArmor;
 			
@@ -586,7 +586,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function factoryHealthOnExecute(point:Point):void
+		private function factoryHealthOnExecute():void
 		{
 			var stats:Stats = _currentFactoryTab.factory.stats.unitHealth;
 			
@@ -602,7 +602,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function factoryAssemblyRateOnExecute(point:Point):void
+		private function factoryAssemblyRateOnExecute():void
 		{
 			var stats:Stats = _currentFactoryTab.factory.stats.assembyRate;
 			
@@ -618,7 +618,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function factoryAssemblyCostOnExecute(point:Point):void
+		private function factoryAssemblyCostOnExecute():void
 		{
 			var stats:Stats = _currentFactoryTab.factory.stats.assembyCost;
 			
@@ -634,7 +634,7 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			}
 		}
 		
-		private function factoryBuildOnExecute(point:Point):void
+		private function factoryBuildOnExecute():void
 		{
 			_currentFactoryTab.factory.enable();
 			

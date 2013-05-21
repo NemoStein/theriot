@@ -1,7 +1,7 @@
 package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
 	import nemostein.framework.dragonfly.modules.text.ShadowedText;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	import nemostein.utils.StringUtils;
 	
 	public class MetalIndicator extends ShadowedText
@@ -13,7 +13,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		override protected function update():void
 		{
-			text = "$" + StringUtils.formatNumber(GamePlay.service.getPlayerMetal(), ",", ".");
+			text = "$" + StringUtils.formatNumber(GamePlayScreen.service.getPlayerMetal(), ",", ".");
 			
 			super.update();
 		}

@@ -4,7 +4,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 	import nemostein.bezier.PathTracker;
 	import nemostein.framework.dragonfly.modules.container.entity.AlphaEntity;
 	import nemostein.framework.dragonfly.modules.container.entity.Animation;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.FactoryStats;
 	import nemostein.utils.ErrorUtils;
 	import nemostein.utils.MathUtils;
@@ -42,6 +42,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		private var _delayToFade:Number;
 		private var _timeToFade:Number;
 		private var _metal:Number;
+		private var _animationFrameOffset:int;
 		
 		public var health:Number;
 		public var armor:Number;
@@ -62,6 +63,8 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		override protected function initialize():void
 		{
 			super.initialize();
+			
+			id = ":" + int(Math.random() * 1000);
 			
 			var stats:FactoryStats = _factory.stats;
 			
@@ -96,7 +99,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 		{
 			if (keyframe == 2)
 			{
-				GamePlay.service.fire(ammoClass, this, _target);
+				GamePlayScreen.service.fire(ammoClass, this, _target);
 			}
 			else if (cycle)
 			{
@@ -156,7 +159,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 					}
 					else
 					{
-						GamePlay.service.hitEnemyComplex(this);
+						GamePlayScreen.service.hitEnemyComplex(this);
 						die();
 					}
 				}
@@ -182,11 +185,11 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 					
 					if (_lookingAt == UP)
 					{
-						frame.y = 0;
+						_animationFrameOffset = 0;
 					}
 					else if (_lookingAt == LEFT || _lookingAt == RIGHT)
 					{
-						frame.y = height;
+						_animationFrameOffset = spriteCols;
 						
 						if (_lookingAt == LEFT && !flipped || _lookingAt != LEFT && flipped)
 						{
@@ -195,7 +198,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 					}
 					else if (_lookingAt == DOWN)
 					{
-						frame.y = height * 2;
+						_animationFrameOffset = spriteCols * 2;
 					}
 				}
 			}
@@ -209,13 +212,18 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 					
 					if (alpha <= 0)
 					{
-						GamePlay.service.removeUnit(this);
+						GamePlayScreen.service.removeUnit(this);
 						super.die();
 					}
 				}
 			}
 			
 			super.update();
+		}
+		
+		override public function moveSpriteToFrame(index:int):void 
+		{
+			super.moveSpriteToFrame(index + _animationFrameOffset);
 		}
 		
 		protected function fire(unit:Unit):void
@@ -234,8 +242,6 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			}
 			
 			health -= damage;
-			
-			trace(id, power.toFixed(3), damage.toFixed(3), health.toFixed(3));
 			
 			if (health < 0)
 			{
@@ -272,7 +278,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 				_dying = true;
 				playAnimation(DIE, false);
 				
-				GamePlay.service.giveMetal(_metal, !ai);
+				GamePlayScreen.service.giveMetal(_metal, !ai);
 			}
 		}
 		

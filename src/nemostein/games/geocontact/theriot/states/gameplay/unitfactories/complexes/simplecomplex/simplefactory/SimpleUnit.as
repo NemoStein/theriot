@@ -17,7 +17,6 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories.complex
 		{
 			super.initialize();
 			
-			drawRectangle(10, 10, 0xff203080);
 			draw(new AssetStatesGameplayUnits01().bitmapData, 48, 32, true);
 			alignAnchor(AnchorAlign.CENTER, AnchorAlign.CENTER);
 		}

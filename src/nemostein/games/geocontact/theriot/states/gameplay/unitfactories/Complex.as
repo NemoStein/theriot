@@ -3,7 +3,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 	import flash.geom.Point;
 	import nemostein.framework.dragonfly.modules.container.entity.Entity;
 	import nemostein.framework.dragonfly.modules.io.MouseAware;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.ComplexStats;
 	
 	public class Complex extends Entity implements MouseAware
@@ -83,7 +83,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			if (!_dead)
 			{
 				_dead = true;
-				GamePlay.service.complexDestroyed(this);
+				GamePlayScreen.service.complexDestroyed(this);
 				
 				for each (var factory:Factory in _factories)
 				{

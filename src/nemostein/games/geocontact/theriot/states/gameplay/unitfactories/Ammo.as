@@ -1,7 +1,7 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 {
 	import nemostein.framework.dragonfly.modules.container.entity.Entity;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	
 	public class Ammo extends Entity
 	{
@@ -24,7 +24,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 			}
 			else
 			{
-				GamePlay.service.removeAmmo(this);
+				GamePlayScreen.service.removeAmmo(this);
 				
 				target.hit(power);
 			}

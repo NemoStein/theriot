@@ -9,7 +9,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.energyBar.AssetStatesGameplayHudEnergyBarEnd;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.energyBar.AssetStatesGameplayHudEnergyBarMiddle;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.energyBar.AssetStatesGameplayHudEnergyBarStart;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Complex;
 	
 	public class EnergyBar extends Bar
@@ -26,7 +26,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		public function EnergyBar()
 		{
-			var playerComplex:Complex = GamePlay.service.complexPlayer;
+			var playerComplex:Complex = GamePlayScreen.service.complexPlayer;
 			
 			_getEnergy = playerComplex.getEnergy;
 			_getEnergyLimit = playerComplex.getEnergyLimit;

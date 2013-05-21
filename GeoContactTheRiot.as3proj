@@ -9,10 +9,10 @@
     <movie width="800" />
     <movie height="600" />
     <movie version="11" />
-    <movie minorVersion="5" />
+    <movie minorVersion="7" />
     <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
-    <movie preferredSDK="AIR 3.6.0;3.6.0;" />
+    <movie preferredSDK="AIR 3.7.0;3.7.0;" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -44,7 +44,7 @@
     <option linkReport="" />
     <option loadExterns="" />
     <option staticLinkRSL="True" />
-    <option additional="-warn-unlikely-function-value=false" />
+    <option additional="-inline" />
     <option compilerConstants="" />
     <option minorVersion="" />
   </build>

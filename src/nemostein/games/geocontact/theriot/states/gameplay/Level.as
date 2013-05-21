@@ -40,13 +40,13 @@ package nemostein.games.geocontact.theriot.states.gameplay
 			add(complexPlayer);
 			add(complexAI);
 			
-			var gamePlayService:GamePlayService = GamePlay.service;
+			var gamePlayService:GamePlayService = GamePlayScreen.service;
 			
 			gamePlayService.setPlayerComplex(complexPlayer);
 			gamePlayService.setAIComplex(complexAI);
 			gamePlayService.setBounds(levelBounds);
 			
-			debugDrawPaths();
+			//debugDrawPaths();
 		}
 		
 		public function getPath(reverse:Boolean = false, index:int = -1):Path
@@ -116,8 +116,6 @@ package nemostein.games.geocontact.theriot.states.gameplay
 		
 		private function debugDrawPath(graphics:Graphics, path:Path, reverse:Boolean):void
 		{
-			//trace(":>", path);
-			
 			var result:Point = new Point();
 			
 			path.quadBezierSegment.interpolate(0, result);

@@ -1,7 +1,7 @@
 package nemostein.games.geocontact.theriot.states.gameplay.hud
 {
 	import nemostein.framework.dragonfly.modules.text.ShadowedText;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	
 	public class TimeElapsed extends ShadowedText
 	{
@@ -12,7 +12,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		override protected function update():void
 		{
-			var timeElapsed:int = GamePlay.service.getBattleElapsedTime();
+			var timeElapsed:int = GamePlayScreen.service.getBattleElapsedTime();
 			
 			var minute:String = int(timeElapsed / 1000 / 60).toString();
 			var seconds:String = int(timeElapsed / 1000 % 60).toString();

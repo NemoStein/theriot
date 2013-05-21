@@ -16,7 +16,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsRange;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsRate;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.icons.AssetStatesGameplayHudIconsSpeed;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayService;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Factory;
 	import nemostein.utils.MathUtils;
@@ -33,7 +33,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 			
 			setParallax(0, 0);
 			
-			_service = GamePlay.service;
+			_service = GamePlayScreen.service;
 			
 			buildHitArea();
 			
@@ -273,7 +273,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		private function switchToFirstTab():void
 		{
-			GamePlay.service.switchFactoryTabTo(_firstFactoryButton);
+			GamePlayScreen.service.switchFactoryTabTo(_firstFactoryButton);
 		}
 		
 		public function onMouseDown(key:int, mouse:Point):Boolean

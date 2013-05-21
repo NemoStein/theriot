@@ -17,7 +17,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs3;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs4;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.tabs.AssetStatesGameplayHudTabs5;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.Factory;
 	
 	public class FactoryButton extends Button
@@ -88,7 +88,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		
 		private function execute(point:Point):void
 		{
-			GamePlay.service.switchFactoryTabTo(this);
+			GamePlayScreen.service.switchFactoryTabTo(this);
 		}
 		
 		override protected function update():void

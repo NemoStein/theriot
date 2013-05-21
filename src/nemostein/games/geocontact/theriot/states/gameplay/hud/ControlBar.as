@@ -10,7 +10,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.controlBar.AssetStatesGameplayHudControlBarEnemyEnd;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.controlBar.AssetStatesGameplayHudControlBarEnemyMiddle;
 	import nemostein.games.geocontact.theriot.assets.states.gameplay.hud.controlBar.AssetStatesGameplayHudControlBarEnemyStart;
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayService;
 	
 	public class ControlBar extends Bar
@@ -26,7 +26,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.hud
 		{
 			_enemy = enemy;
 			
-			var gamePlayService:GamePlayService = GamePlay.service;
+			var gamePlayService:GamePlayService = GamePlayScreen.service;
 			var getMaxValue:Function = gamePlayService.getMaxBattleControl;
 			var getValue:Function;
 			

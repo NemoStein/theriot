@@ -1,6 +1,6 @@
 package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 {
-	import nemostein.games.geocontact.theriot.states.gameplay.GamePlay;
+	import nemostein.games.geocontact.theriot.states.gameplay.GamePlayScreen;
 	import nemostein.games.geocontact.theriot.states.gameplay.unitfactories.stats.FactoryStats;
 	import nemostein.utils.ErrorUtils;
 	
@@ -54,7 +54,7 @@ package nemostein.games.geocontact.theriot.states.gameplay.unitfactories
 				
 				if (_assemblyReady && _complex.drain(stats.assembyCost.value))
 				{
-					GamePlay.service.addUnit(new unitClass(this));
+					GamePlayScreen.service.addUnit(new unitClass(this));
 					
 					_assemblyReady = false;
 				}
