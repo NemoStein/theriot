@@ -15,7 +15,9 @@ package
 			
 			loaderInfo.addEventListener(ProgressEvent.PROGRESS, progress);
 			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
-		
+			
+			trace("Preloading");
+			
 			// TODO show loader
 		}
 		

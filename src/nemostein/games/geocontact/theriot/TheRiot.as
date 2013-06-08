@@ -3,9 +3,10 @@ package nemostein.games.geocontact.theriot
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import nemostein.framework.dragonfly.Game;
-	import nemostein.games.geocontact.theriot.states.Screen;
-	import nemostein.games.geocontact.theriot.states.ScreenService;
-	import nemostein.games.geocontact.theriot.states.start.StartScreen;
+	import nemostein.games.geocontact.theriot.assets.Neuropol;
+	import nemostein.games.geocontact.theriot.screens.Screen;
+	import nemostein.games.geocontact.theriot.screens.ScreenService;
+	import nemostein.games.geocontact.theriot.screens.start.StartScreen;
 	
 	public class TheRiot extends Game
 	{
@@ -18,6 +19,7 @@ package nemostein.games.geocontact.theriot
 		{
 			super.start(stage, container);
 			
+			registerFont(Neuropol);
 			changeCursor(new Cursor());
 			
 			var screenService:ScreenService = Screen.service;

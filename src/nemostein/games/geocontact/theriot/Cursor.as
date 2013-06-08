@@ -1,7 +1,7 @@
 package nemostein.games.geocontact.theriot
 {
 	import nemostein.framework.dragonfly.modules.container.entity.Entity;
-	import nemostein.games.geocontact.theriot.assets.AssetCursor;
+	import nemostein.games.geocontact.theriot.assets.DefaultCursor;
 	
 	public class Cursor extends Entity
 	{
@@ -11,7 +11,7 @@ package nemostein.games.geocontact.theriot
 		{
 			super.initialize();
 			
-			draw(new AssetCursor().bitmapData);
+			draw(new DefaultCursor());
 			width = 22;
 			
 			addAnimation(DEFAULT, [0, 1, 2, 3], 8);
